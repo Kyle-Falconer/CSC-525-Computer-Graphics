@@ -45,7 +45,7 @@ int curRow = 0;
 int xRowPosition = 285;
 
 int typingPositionX = 285;
-int typingPositionY = 0;
+int typingPositionY = 268;
 
 float currentRed = 0;
 float currentGreen = 0;
@@ -76,24 +76,25 @@ class glChar {
 			float xPosition = pos[0]/1.28 - 300;
 			float yPosition = pos[1]/1.28 - 300;
 
+			glColor3f(currentRed, currentGreen, currentBlue);
+
 			if (character == '\n' || xPosition > xRowPosition - 5)
 			{
-				glRasterPos2i(-xRowPosition, yPosition - rowHeight);
+				glRasterPos2f(-xRowPosition, yPosition - rowHeight);
 			}
-			else if (pos[1] <= 250 - 30*rowHeight)
+			else if (pos[1] <= 268 - 29*rowHeight)
 			{
 				return;
 			}
 			else
 			{
-				glColor3f(currentRed, currentGreen, currentBlue);
-				glRasterPos2i(xPosition, yPosition); //must declare rasterPos to change color
+				glRasterPos2f(xPosition, yPosition); //must declare rasterPos to change color
 			}
 
 			if (font == 0)
-				glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, character);
+				glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, character);
 			else if (font == 1)
-				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, character);
+				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, character);
 			else
 				glutBitmapCharacter(GLUT_BITMAP_8_BY_13, character);
 		}
@@ -126,7 +127,7 @@ void drawEditor() {
 		drawLinePosition -= rowHeight;
 	}
 
-	glRasterPos2i(-xRowPosition, 250 - curRow*rowHeight + 3);
+	glRasterPos2i(typingPositionX, typingPositionY - curRow*rowHeight + 3);
 
 	// Iterates over text vector and displays all current text
 	for(auto i : text) {
