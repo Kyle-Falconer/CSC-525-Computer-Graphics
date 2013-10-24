@@ -31,14 +31,34 @@ using std::ifstream;
 // To exit if the file doesn't exist
 #include <cstdlib>
 
+int mainWindow;		// id for the main window
 int infoWindow;		// id for the help window
-int editorWindow;	// id for the main window
-int menuWindow;		// id for subwindow with menus
+int editorWindow;	// id for the editor subwindow
+int menuWindow;		// id for menu subwindow
+
+int rowHeight = 18;	// Rows will be 18 world units, leaving 45 units worth of buffer
+int row[30][2];		// There are 30 rows with 2 parameters each: Y-Position and an array of characters
+// Each character inside of the character array will have 5 parameters, R, G, B, Font, and char
+int xRowPosition = 285;
 
 void drawEditor()
 {
 	glutSetWindow(editorWindow);	// Sets window to editor
 
+	int drawLinePosition = 250; //accounting for menu at top and 25 unit buffer
+
+	glColor3f(.9, .9, .9);
+	glPointSize(1);
+
+	for (int i = 0; i < 30; i ++)
+	{
+		glBegin(GL_LINES);
+			glVertex2i(-xRowPosition, drawLinePosition);
+			glVertex2i(xRowPosition, drawLinePosition);
+		glEnd();
+		row[i][0] = drawLinePosition;			// Defines row heights while drawing lines
+		drawLinePosition -= rowHeight;
+	}
 }
 
 void drawMenu()
@@ -51,22 +71,29 @@ void drawInfo()
 	glutSetWindow(infoWindow);  
 }
 
+void mainInit()
+{
+	glClearColor(1, 1, 1, 0);			// specify a background
+	gluOrtho2D(-300, 300, -300, 300);  // specify a viewing area
+}
+
 void editorInit()
 {
-	glClearColor(1, 1, 1, 0);			// specify a background clor: blueish-green
-	gluOrtho2D(-400, 400, -300, 300);  // specify a viewing area
+	glClearColor(1, 1, 1, 0);			// specify a background
+	gluOrtho2D(-300, 300, -300, 275);  // specify a viewing area
+	glutSetCursor(GLUT_CURSOR_TEXT);
 }
 
 void menuInit()
 {
-	glClearColor(.5, .5, .5, 0);			// specify a background clor: blueish-green
-	gluOrtho2D(-400, 400, -19, 0);  // specify a viewing area
+	glClearColor(.75, .75, .75, 0);			// specify a background
+	gluOrtho2D(-300, 300, -19, 0);  // specify a viewing area
 }
 
 void infoInit()
 {
-	glClearColor(.5, .5, .5, 0);			// specify a background clor: blueish-green
-	gluOrtho2D(-200, 200, -400, 400);  // specify a viewing area
+	glClearColor(1, 1, 1, 0);			// specify a background
+	gluOrtho2D(-200, 200, -300, 300);  // specify a viewing area
 }
 
 //***********************************************************************************
@@ -86,20 +113,23 @@ void main(int argc, char ** argv)
 {
 	glutInit(& argc, argv);
 
-	glutInitWindowSize(1024, 768);							// specify a window size
-	glutInitWindowPosition(500, 0);							// specify a window position
-	editorWindow = glutCreateWindow("Simple Text Editor");	// create a titled window
+	glutInitWindowSize(768, 768);							// specify a window size
+	glutInitWindowPosition(500, 50);							// specify a window position
+	mainWindow = glutCreateWindow("Simple Text Editor");	// create a titled window
 
-	editorInit();									// setting up
+	mainInit();									// setting up
 	glutDisplayFunc(myDisplayCallback);		// register a callback
 
-	menuWindow = glutCreateSubWindow(editorWindow, 0, 0, 1024, 24);
+	editorWindow = glutCreateSubWindow(mainWindow, 0, 32, 768, 736);
+	editorInit();
+	glutDisplayFunc(myDisplayCallback);
+
+	menuWindow = glutCreateSubWindow(mainWindow, 0, 0, 768, 32);
 	menuInit();
 	glutDisplayFunc(myDisplayCallback);
 
-
-	glutInitWindowSize(384, 768);							// specify a window size
-	glutInitWindowPosition(100, 0);							// specify a window position
+	glutInitWindowSize(384, 576);							// specify a window size
+	glutInitWindowPosition(50, 50);							// specify a window position
 
 	infoWindow = glutCreateWindow("Info/Help");
 	infoInit();
