@@ -41,9 +41,6 @@ bool hasTyped = false;
 std::vector<glChar> text;
 
 void letterInput(unsigned char key, int xMouse, int yMouse) {
-	glChar tmp;
-	tmp.setValues(key, selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
-	text.push_back(tmp);
 	switch (key)
 	{
 		case 8:
@@ -132,7 +129,19 @@ void drawEditor() {
 }
 
 void drawMenu() {
-	glutSetWindow(menuWindow);		// Sets window to menu
+	glutSetWindow(menuWindow);
+
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2i(0,0);
+	std::string menu_text = "Menu";
+	void * font = GLUT_BITMAP_8_BY_13;
+	for (string::iterator i = menu_text.begin(); i != menu_text.end(); ++i)
+	{
+		char c = *i;
+		glutBitmapCharacter(font, c);
+	}
+
+	
 }
 
 void drawInfo() {
@@ -155,7 +164,9 @@ void editorInit() {
 
 void menuInit() {
 	glClearColor(.75, .75, .75, 0);			// specify a background
-	gluOrtho2D(-300, 300, -19, 0);  // specify a viewing area
+	gluOrtho2D(-10, 300,-10, 19);  // specify a viewing area
+	
+	textMenu();
 }
 
 void infoInit() {
@@ -167,8 +178,8 @@ void infoInit() {
 void myDisplayCallback() {
 	glClear(GL_COLOR_BUFFER_BIT);	// draw the background
 
-	drawEditor();
 	drawMenu();
+	drawEditor();
 	drawInfo();
 
 	glFlush(); // flush out the buffer contents
@@ -194,10 +205,12 @@ void main(int argc, char ** argv) {
 	menuInit();
 	glutDisplayFunc(myDisplayCallback);
 
+
 	// Initialize editor window last so that user can begin typing
 	editorWindow = glutCreateSubWindow(mainWindow, 0, 32, 768, 736);
 	editorInit();
 	glutDisplayFunc(myDisplayCallback);
+
 
 	glutMainLoop();							// get into an infinite loop
 

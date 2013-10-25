@@ -27,7 +27,7 @@ void textMenu(){
 	glutAddMenuEntry("EXIT", exit_program);
 
 	// Associate a mouse button with menu
-	glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glutAttachMenu(GLUT_LEFT_BUTTON);
 
 }
 
