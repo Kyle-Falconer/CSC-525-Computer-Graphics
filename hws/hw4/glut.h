@@ -9,5 +9,7 @@
 #include <algorithm>
 #include <vector>
 using namespace std;
+#include <fstream>
+using std::ifstream;
 
 #endif

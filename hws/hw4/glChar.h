@@ -28,6 +28,7 @@ private:
 public:
 	void setValues(const char curChar, float curRed, float curGreen, float curBlue, void *curFont);
 	void display();
+	char getChar();
 };
 
 

@@ -25,11 +25,23 @@ void textMenu(){
 	glutAddSubMenu("Save", save_content);
 	glutAddSubMenu("Colors", submenu_colors);
 	glutAddSubMenu("Fonts", submenu_fonts);
+	glutAddMenuEntry("SAVE", save_program);
 	glutAddMenuEntry("EXIT", exit_program);
 
 	// Associate a mouse button with menu
 	glutAttachMenu(GLUT_LEFT_BUTTON);
 
+}
+
+void saveFile() {
+	// Removes any previous version of typed.txt
+	remove("C:\\TEMP\\typed.txt");
+	
+	ofstream ResultFile("C:\\TEMP\\typed.txt");
+	
+	for(auto i : text) {
+		ResultFile << i.getChar();
+	}
 }
 
 // Menu handling function definition
@@ -94,7 +106,11 @@ void menu_handler(int item)
 			selected_font = GLUT_BITMAP_HELVETICA_18;
 		}
 		break;
-
+	case save_program:
+		{
+			saveFile();
+		}
+		break;
 	case exit_program:
 		{
 			exit(0);
