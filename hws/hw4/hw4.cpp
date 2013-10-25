@@ -17,14 +17,13 @@
 	4.		Press Ctrl+F5					to EXECUTE
 ===================================================================================*/
 
-#define _USE_MATH_DEFINES
-#include <iostream>
-#include <GL/glut.h>				// include GLUT library
-#include <cmath>					// include math library
-#include <string>
-#include <algorithm>
-#include <vector>
-using namespace std;
+#include "glut.h"
+#include "glChar.h"
+#include "text_menu.h"
+
+
+
+
 
 // To allow file reading
 #include <fstream>
@@ -38,74 +37,12 @@ int infoWindow;		// id for the help window
 int editorWindow;	// id for the editor subwindow
 int menuWindow;		// id for menu subwindow
 
-int rowHeight = 18;	// Rows will be 18 world units, leaving 45 units worth of buffer
-int curRow = 0;
-// There are 30 rows with 2 parameters each: Y-Position and an array of characters
-// Each character inside of the character array will have 5 parameters, R, G, B, Font, and char
-int xRowPosition = 285;
-
-int typingPositionX = 285;
-int typingPositionY = 268;
-
-float currentRed = 0;
-float currentGreen = 0;
-float currentBlue = 0;
-int currentFont = 2;
-// Font 0 will be GLUT_BITMAP_TIMES_ROMAN_10, font 1 will be GLUT_BITMAP_HELVETICA_10,
-// and font 2 will be GLUT_BITMAP_8_BY_13
-
-class glChar {
-	char character;
-	int red, green, blue;
-	int font;
-
-	public:
-		void setValues(const char curChar, float curRed, float curGreen, float curBlue, int curFont) {
-			character = curChar;
-			red = curRed;
-			green = curGreen;
-			blue = curBlue;
-			font = curFont;
-		}
-
-		void display() {
-			GLfloat pos[4];
-			glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
-
-			// 1.28 is the scale from world to window
-			float xPosition = pos[0]/1.28 - 300;
-			float yPosition = pos[1]/1.28 - 300;
-
-			glColor3f(currentRed, currentGreen, currentBlue);
-
-			if (character == '\n' || xPosition > xRowPosition - 5)
-			{
-				glRasterPos2f(-xRowPosition, yPosition - rowHeight);
-			}
-			else if (pos[1] <= 268 - 29*rowHeight)
-			{
-				return;
-			}
-			else
-			{
-				glRasterPos2f(xPosition, yPosition); //must declare rasterPos to change color
-			}
-
-			if (font == 0)
-				glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, character);
-			else if (font == 1)
-				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, character);
-			else
-				glutBitmapCharacter(GLUT_BITMAP_8_BY_13, character);
-		}
-
-};
 
 std::vector<glChar> text;
 
 void letterInput(unsigned char key, int xMouse, int yMouse) {
 	glChar tmp;
-	tmp.setValues(key, currentRed, currentGreen, currentBlue, currentFont);
+	tmp.setValues(key, selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
 	text.push_back(tmp);
 	glutPostRedisplay();
 }
@@ -120,9 +57,9 @@ void drawEditor() {
 	for (int i = 0; i < 30; i ++)
 	{
 		glBegin(GL_LINES);
-			glColor3f(.9, .9, .9);
-			glVertex2i(-xRowPosition, drawLinePosition);
-			glVertex2i(xRowPosition, drawLinePosition);
+		glColor3f(.9, .9, .9);
+		glVertex2i(-xRowPosition, drawLinePosition);
+		glVertex2i(xRowPosition, drawLinePosition);
 		glEnd();
 		drawLinePosition -= rowHeight;
 	}
@@ -146,6 +83,7 @@ void drawInfo() {
 void mainInit() {
 	glClearColor(1, 1, 1, 0);			// specify a background
 	gluOrtho2D(-300, 300, -300, 300);  // specify a viewing area
+
 }
 
 void editorInit() {
@@ -202,5 +140,5 @@ void main(int argc, char ** argv) {
 	glutDisplayFunc(myDisplayCallback);
 
 	glutMainLoop();							// get into an infinite loop
-	
+
 }
