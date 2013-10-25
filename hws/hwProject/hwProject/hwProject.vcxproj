@@ -81,7 +81,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\hw4\EditorProperties.h" />
     <ClInclude Include="..\..\hw4\glChar.h" />
     <ClInclude Include="..\..\hw4\glut.h" />
     <ClInclude Include="..\..\hw4\text_menu.h" />

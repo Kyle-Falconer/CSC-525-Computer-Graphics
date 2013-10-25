@@ -1,5 +1,4 @@
 #include "glChar.h"
-#include "EditorProperties.h"
 
 void glChar::setValues(const char curChar, float curRed, float curGreen, float curBlue, void *curFont) {
 	this->character = curChar;
@@ -34,4 +33,3 @@ void glChar::display() {
 
 	glutBitmapCharacter(selected_font, this->character);
 }
-
