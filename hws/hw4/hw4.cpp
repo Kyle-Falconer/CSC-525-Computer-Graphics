@@ -307,7 +307,17 @@ void infoInit() {
 
 void saveContent(){
 	//FIXME
-	cout<<"Saving content...";
+	cout<<"Saving content..."<<endl;
+	/*
+	// Removes any previous version of typed.txt
+	remove("C:\\TEMP\\typed.txt");
+	
+	ofstream ResultFile("C:\\TEMP\\typed.txt");
+	
+	for(auto i : text) {
+		ResultFile << i.getChar();
+	}
+	*/
 }
 
 //***********************************************************************************
