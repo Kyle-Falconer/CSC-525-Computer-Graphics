@@ -17,8 +17,12 @@ void glChar::display() {
 	float yPosition = pos[1]/1.28 - 300;
 
 	glColor3f(this->red, this->green, this->blue);
-
-	if (this->character == '\n' || xPosition > xRowPosition - 5)
+	if (this->character == '\n')
+	{
+		glRasterPos2f(-xRowPosition, yPosition - rowHeight);
+		return;
+	}
+	else if (this->character == '\n' || xPosition > xRowPosition - 5)
 	{
 		glRasterPos2f(-xRowPosition, yPosition - rowHeight);
 	}

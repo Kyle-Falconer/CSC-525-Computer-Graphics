@@ -46,7 +46,9 @@ enum Menu_Option {
 	glut_HELVETICA_10,
 	glut_HELVETICA_12,
 	glut_HELVETICA_18,
-	exit_program
+	exit_program,
+	show_info,
+	hide_info
 };
 
 void textMenu();
@@ -60,7 +62,7 @@ void textMenu(){
 	glClearColor(.5, .5, .5, 0);			// specify a background clor: blueish-green
 	gluOrtho2D(-400, 400, -19, 0);  // specify a viewing area
 
-	int menu_main, submenu_colors, submenu_fonts;
+	int menu_main, submenu_colors, submenu_fonts, submenu_info;
 
 	submenu_colors =  glutCreateMenu(menu_handler);
 	glutAddMenuEntry("Red", glut_red);
@@ -75,10 +77,15 @@ void textMenu(){
 	glutAddMenuEntry("GLUT_BITMAP_HELVETICA_12", glut_HELVETICA_12);
 	glutAddMenuEntry("GLUT_BITMAP_HELVETICA_18", glut_HELVETICA_18);
 
+	submenu_info = glutCreateMenu(menu_handler);
+	glutAddMenuEntry("Show", show_info);
+	glutAddMenuEntry("Hide", hide_info);
+
 	menu_main = glutCreateMenu(menu_handler);
 	glutAddMenuEntry("Save", save_content);
 	glutAddSubMenu("Colors", submenu_colors);
 	glutAddSubMenu("Fonts", submenu_fonts);
+	glutAddSubMenu("Info", submenu_info);
 	glutAddMenuEntry("EXIT", exit_program);
 
 	// Associate a mouse button with menu
@@ -95,7 +102,16 @@ void menu_handler(int item)
 	case save_content:
 		saveContent();
 		break;
-
+	case show_info:
+		glutSetWindow(infoWindow);
+		glutShowWindow();
+		glutSetWindow(mainWindow);
+		break;
+	case hide_info:
+		glutSetWindow(infoWindow);
+		glutHideWindow();
+		glutSetWindow(mainWindow);
+		break;
 	case glut_red:
 		selected_text_color[0] = 1.0;
 		selected_text_color[1] = 0.0;
@@ -154,9 +170,6 @@ void menu_handler(int item)
 
 	return;
 }
-
-
-
 
 std::vector<glChar> text;
 
@@ -313,7 +326,7 @@ void infoInit() {
 void saveContent(){
 	//FIXME
 	cout<<"Saving content..."<<endl;
-	/*
+	
 	// Removes any previous version of typed.txt
 	remove("C:\\TEMP\\typed.txt");
 	
@@ -322,7 +335,7 @@ void saveContent(){
 	for(auto i : text) {
 		ResultFile << i.getChar();
 	}
-	*/
+	
 }
 
 //***********************************************************************************
