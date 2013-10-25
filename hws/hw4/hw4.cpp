@@ -37,8 +37,10 @@ bool hasTyped = false;
 
 enum Menu_Option {
 	save_content,
+	glut_black,
 	glut_red,
 	glut_green,
+	glut_blue,
 	glut_8_BY_13,
 	glut_9_BY_15, 
 	glut_TIMES_ROMAN_10,
@@ -65,8 +67,10 @@ void textMenu(){
 	int menu_main, submenu_colors, submenu_fonts, submenu_info;
 
 	submenu_colors =  glutCreateMenu(menu_handler);
+	glutAddMenuEntry("Black", glut_black);
 	glutAddMenuEntry("Red", glut_red);
 	glutAddMenuEntry("Green", glut_green);
+	glutAddMenuEntry("Blue", glut_blue);
 
 	submenu_fonts =  glutCreateMenu(menu_handler);
 	glutAddMenuEntry("GLUT_BITMAP_8_BY_13", glut_8_BY_13);
@@ -102,16 +106,25 @@ void menu_handler(int item)
 	case save_content:
 		saveContent();
 		break;
+
 	case show_info:
 		glutSetWindow(infoWindow);
 		glutShowWindow();
 		glutSetWindow(mainWindow);
 		break;
+
 	case hide_info:
 		glutSetWindow(infoWindow);
 		glutHideWindow();
 		glutSetWindow(mainWindow);
 		break;
+
+	case glut_black:
+		selected_text_color[0] = 0.0;
+		selected_text_color[1] = 0.0;
+		selected_text_color[2] = 0.0;
+		break;	
+
 	case glut_red:
 		selected_text_color[0] = 1.0;
 		selected_text_color[1] = 0.0;
@@ -123,6 +136,12 @@ void menu_handler(int item)
 		selected_text_color[1] = 1.0;
 		selected_text_color[2] = 0.0;
 		break;
+
+	case glut_blue:
+		selected_text_color[0] = 0.0;
+		selected_text_color[1] = 0.0;
+		selected_text_color[2] = 1.0;
+		break;	
 
 	case glut_8_BY_13:
 		selected_font = GLUT_BITMAP_8_BY_13;
@@ -202,7 +221,7 @@ void mouseInput(int button, int state, int x, int y) {
 		
 		int yWorld = y/1.28 - 300;
 		cout<<"changing initial cursor position, yWorld: "<< yWorld <<endl;
-		for (int i = 0; i < typingPositionY; i++) {
+		for (int i = 1; i <= 30; i++) {
 			if (typingPositionY - i*rowHeight >= yWorld)
 			{
 				cout <<"found the row"<<endl;
