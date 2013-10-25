@@ -1,5 +1,5 @@
 #include "text_menu.h"
-#include "glChar.h"
+
 
 void textMenu(){
 
@@ -103,6 +103,7 @@ void menu_handler(int item)
 	}
 
 	glutPostRedisplay();
-
+	cout << "color: " << selected_text_color[0] << " "<< selected_text_color[1] << " "<< selected_text_color[2] << endl;
+			
 	return;
 }

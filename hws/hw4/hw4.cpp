@@ -128,24 +128,34 @@ void drawEditor() {
 	}
 }
 
-void drawMenu() {
-	glutSetWindow(menuWindow);
-
+void drawText(int win, float x, float y, float r, float g, float b, std::string text){
+	glutSetWindow(win);
 	glColor3f(1.0, 1.0, 1.0);
-	glRasterPos2i(0,0);
-	std::string menu_text = "Menu";
+	glRasterPos2i(x,y);
 	void * font = GLUT_BITMAP_8_BY_13;
-	for (string::iterator i = menu_text.begin(); i != menu_text.end(); ++i)
+	for (string::iterator i = text.begin(); i != text.end(); ++i)
 	{
 		char c = *i;
 		glutBitmapCharacter(font, c);
 	}
+}
 
-	
+void drawMenu() {
+	drawText(menuWindow, -10, 5, 1.0, 1.0, 1.0, "Menu");
 }
 
 void drawInfo() {
-	glutSetWindow(infoWindow);  
+	
+	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "This text editor allows you to type text on ");
+	drawText(infoWindow, -190, 240, 1.0, 0.0, 0.0,  "any line. The text editor also allows you to ");
+	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "change color and font for any text typed ");
+	drawText(infoWindow, -190, 200, 1.0, 0.0, 0.0,  "after selecting the new font/color.");
+	
+
+	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "Instructions for changing font/color:");
+	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "1. Click the grey menu bar at the top of the");
+	drawText(infoWindow, -190, 120, 1.0, 0.0, 0.0,  "   editor window.");
+	drawText(infoWindow, -190, 100, 1.0, 0.0, 0.0,  "2. Select an option.");
 }
 
 void mainInit() {
@@ -170,7 +180,7 @@ void menuInit() {
 }
 
 void infoInit() {
-	glClearColor(1, 1, 1, 0);			// specify a background
+	glClearColor(.40, .40, .40, 0);			// specify a background
 	gluOrtho2D(-200, 200, -300, 300);  // specify a viewing area
 }
 

@@ -16,7 +16,7 @@ void glChar::display() {
 	float xPosition = pos[0]/1.28 - 300;
 	float yPosition = pos[1]/1.28 - 300;
 
-	glColor3f(selected_text_color[0], selected_text_color[1], selected_text_color[2]);
+	glColor3f(this->red, this->green, this->blue);
 
 	if (this->character == '\n' || xPosition > xRowPosition - 5)
 	{
@@ -30,6 +30,6 @@ void glChar::display() {
 	{
 		glRasterPos2f(xPosition, yPosition); //must declare rasterPos to change color
 	}
-
-	glutBitmapCharacter(selected_font, this->character);
+	cout << "glChar display text_color: " << this->red << " "<< this->green << " "<< this->blue << endl;
+	glutBitmapCharacter(this->font, this->character);
 }

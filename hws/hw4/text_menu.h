@@ -2,6 +2,7 @@
 #define TEXTMENU_H
 
 #include "glut.h"
+#include "glChar.h"
 
 enum Menu_Option {
 	glut_red,
