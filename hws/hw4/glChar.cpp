@@ -33,3 +33,7 @@ void glChar::display() {
 	cout << "glChar display text_color: " << this->red << " "<< this->green << " "<< this->blue << endl;
 	glutBitmapCharacter(this->font, this->character);
 }
+
+char glChar::getChar() {
+	return this->character;
+}
