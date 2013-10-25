@@ -185,15 +185,22 @@ void letterInput(unsigned char key, int xMouse, int yMouse) {
 }
 
 void mouseInput(int button, int state, int x, int y) {
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && hasTyped == false) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !hasTyped) {
+		
 		int yWorld = y/1.28 - 300;
-		for (int i = 0; i < 0; i++) {
+		cout<<"changing initial cursor position, yWorld: "<< yWorld <<endl;
+		for (int i = 0; i < typingPositionY; i++) {
 			if (typingPositionY - i*rowHeight >= yWorld)
 			{
-				curRow = i;
+				cout <<"found the row"<<endl;
+				curRow = 30-i;
 			}
 		}
+		cout << "new cursor position: "<< curRow << endl;
 		glutPostRedisplay();
+
+	} else {
+		cout<<"button: "<< button <<" "<< state << ", has typed: "<<hasTyped<<endl;
 	}
 }
 
@@ -265,12 +272,10 @@ void drawMenu() {
 }
 
 void drawInfo() {
-
 	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "This text editor allows you to type text on ");
 	drawText(infoWindow, -190, 240, 1.0, 0.0, 0.0,  "any line. The text editor also allows you to ");
 	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "change color and font for any text typed ");
 	drawText(infoWindow, -190, 200, 1.0, 0.0, 0.0,  "after selecting the new font/color.");
-
 
 	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "Instructions for changing font/color:");
 	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "1. Click the grey menu bar at the top of the");
