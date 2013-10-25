@@ -54,6 +54,8 @@ int currentFont = 2;
 // Font 0 will be GLUT_BITMAP_TIMES_ROMAN_10, font 1 will be GLUT_BITMAP_HELVETICA_10,
 // and font 2 will be GLUT_BITMAP_8_BY_13
 
+bool hasTyped = false;
+
 class glChar {
 	char character;
 	int red, green, blue;
@@ -78,8 +80,11 @@ class glChar {
 
 			glColor3f(currentRed, currentGreen, currentBlue);
 
-			if (character == '\n' || xPosition > xRowPosition - 5)
-			{
+			if (character == '\n') {
+				glRasterPos2f(-xRowPosition, yPosition - rowHeight);
+				return;
+			}
+			else if (xPosition > xRowPosition - 5) {
 				glRasterPos2f(-xRowPosition, yPosition - rowHeight);
 			}
 			else if (pos[1] <= 268 - 29*rowHeight)
@@ -98,16 +103,45 @@ class glChar {
 			else
 				glutBitmapCharacter(GLUT_BITMAP_8_BY_13, character);
 		}
-
 };
 
 std::vector<glChar> text;
 
 void letterInput(unsigned char key, int xMouse, int yMouse) {
-	glChar tmp;
-	tmp.setValues(key, currentRed, currentGreen, currentBlue, currentFont);
-	text.push_back(tmp);
+	switch (key)
+	{
+		case 8:
+			if (text.size() > 0) {
+				text.pop_back();
+				glutPostRedisplay();
+			}
+			break;
+		case 13:
+			glChar enter;
+			enter.setValues('\n', currentRed, currentGreen, currentBlue, currentFont);
+			text.push_back(enter);
+			break;
+		default:
+			glChar tmp;
+			tmp.setValues(key, currentRed, currentGreen, currentBlue, currentFont);
+			text.push_back(tmp);
+			break;
+	}
+	hasTyped = true;
 	glutPostRedisplay();
+}
+
+void mouseInput(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && hasTyped == false) {
+		int yWorld = y/1.28 - 300;
+		for (int i = 0; i < 0; i++) {
+			if (typingPositionY - i*rowHeight >= yWorld)
+			{
+				curRow = i;
+			}
+		}
+		glutPostRedisplay();
+	}
 }
 
 void drawEditor() {
@@ -133,6 +167,32 @@ void drawEditor() {
 	for(auto i : text) {
 		i.display();
 	}
+	if (hasTyped) {
+		GLfloat pos[4];
+		glGetFloatv(GL_CURRENT_RASTER_POSITION, pos);
+		float xPosition = pos[0]/1.28 - 300;
+		float yPosition = pos[1]/1.28 - 300;
+
+		glBegin(GL_LINE_STRIP);
+			glColor3f(currentRed, currentGreen, currentBlue);
+			glVertex2i(xPosition + 5, yPosition);
+			glVertex2i(xPosition + 10, yPosition);
+			glVertex2i(xPosition + 10, yPosition + 10);
+			glVertex2i(xPosition + 5, yPosition + 10);
+			glVertex2i(xPosition + 5, yPosition);
+		glEnd();
+	}
+	else
+	{
+		glBegin(GL_LINE_STRIP);
+			glColor3f(currentRed, currentGreen, currentBlue);
+			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
+			glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 15);
+			glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 5);
+			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 5);
+			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
+		glEnd();
+	}
 }
 
 void drawMenu() {
@@ -152,6 +212,7 @@ void editorInit() {
 	glClearColor(1, 1, 1, 0);			// specify a background
 	gluOrtho2D(-300, 300, -300, 275);  // specify a viewing area
 	glutSetCursor(GLUT_CURSOR_TEXT);
+	glutMouseFunc(mouseInput);
 	glutKeyboardFunc(letterInput);
 }
 
