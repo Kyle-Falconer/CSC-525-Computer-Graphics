@@ -1,20 +1,20 @@
 /*===================================================================================
- PROGRAMMER:			Brett Story,	Kyle Falconer
- FOLDERS:				Brett322,		Falconer1
- BRETT'S TASKS:			(Contribution: 50%)
- KYLE'S TASKS:			(Contribution: 50%)
- COURSE:				CSC 525/625
- MODIFIED BY:			N/A
- LAST MODIFIED DATE:	Oct. 25, 2013
- DESCRIPTION:			A simple text editor.
+PROGRAMMER:			Brett Story,	Kyle Falconer
+FOLDERS:				Brett322,		Falconer1
+BRETT'S TASKS:			(Contribution: 50%)
+KYLE'S TASKS:			(Contribution: 50%)
+COURSE:				CSC 525/625
+MODIFIED BY:			N/A
+LAST MODIFIED DATE:	Oct. 25, 2013
+DESCRIPTION:			A simple text editor.
 
- FILES:					h4.cpp, (hwProject.sln, ...)
- IDE/COMPILER:			MicroSoft Visual Studio 2012
- INSTRUCTION FOR COMPILATION AND EXECUTION:
-	1.		Double click on labProject.sln	to OPEN the project
-	2.		Press Ctrl+F7					to COMPILE
-	3.		Press Ctrl+Shift+B				to BUILD (COMPILE+LINK)
-	4.		Press Ctrl+F5					to EXECUTE
+FILES:					h4.cpp, (hwProject.sln, ...)
+IDE/COMPILER:			MicroSoft Visual Studio 2012
+INSTRUCTION FOR COMPILATION AND EXECUTION:
+1.		Double click on labProject.sln	to OPEN the project
+2.		Press Ctrl+F7					to COMPILE
+3.		Press Ctrl+Shift+B				to BUILD (COMPILE+LINK)
+4.		Press Ctrl+F5					to EXECUTE
 ===================================================================================*/
 
 #include "glut.h"
@@ -49,9 +49,11 @@ enum Menu_Option {
 	exit_program
 };
 
-void saveContent();
 void textMenu();
 void menu_handler(int); // Menu handling function declaration
+void saveContent();
+
+
 
 void textMenu(){
 
@@ -74,7 +76,7 @@ void textMenu(){
 	glutAddMenuEntry("GLUT_BITMAP_HELVETICA_18", glut_HELVETICA_18);
 
 	menu_main = glutCreateMenu(menu_handler);
-	glutAddSubMenu("Save", save_content);
+	glutAddMenuEntry("Save", save_content);
 	glutAddSubMenu("Colors", submenu_colors);
 	glutAddSubMenu("Fonts", submenu_fonts);
 	glutAddMenuEntry("EXIT", exit_program);
@@ -91,54 +93,42 @@ void menu_handler(int item)
 	{
 
 	case save_content:
-		{
-			saveContent();
-		}
-	case glut_red:
-		{
-			selected_text_color[0] = 1.0;
-			selected_text_color[1] = 0.0;
-			selected_text_color[2] = 0.0;
-		}
+		saveContent();
 		break;
-	case glut_green:
-		{
-			selected_text_color[0] = 0.0;
-			selected_text_color[1] = 1.0;
-			selected_text_color[2] = 0.0;
-		}
-		break;
-	case glut_8_BY_13:
-		{
-			selected_font = GLUT_BITMAP_8_BY_13;
-		}
-		break;
-	case glut_9_BY_15:
-		{
-			selected_font = GLUT_BITMAP_9_BY_15;
-		}
-		break;
-	case glut_TIMES_ROMAN_10:
-		{
-			selected_font = GLUT_BITMAP_TIMES_ROMAN_10;
-		}
-		break;
-	case glut_TIMES_ROMAN_24:
 
-		{
-			selected_font = GLUT_BITMAP_TIMES_ROMAN_24;
-		}
+	case glut_red:
+		selected_text_color[0] = 1.0;
+		selected_text_color[1] = 0.0;
+		selected_text_color[2] = 0.0;
+		break;	
+
+	case glut_green:
+		selected_text_color[0] = 0.0;
+		selected_text_color[1] = 1.0;
+		selected_text_color[2] = 0.0;
+		break;
+
+	case glut_8_BY_13:
+		selected_font = GLUT_BITMAP_8_BY_13;
+		break;
+
+	case glut_9_BY_15:
+		selected_font = GLUT_BITMAP_9_BY_15;
+		break;
+
+	case glut_TIMES_ROMAN_10:
+		selected_font = GLUT_BITMAP_TIMES_ROMAN_10;
+		break;
+
+	case glut_TIMES_ROMAN_24:
+		selected_font = GLUT_BITMAP_TIMES_ROMAN_24;
 		break;
 
 	case glut_HELVETICA_10:
-		{
-			selected_font = GLUT_BITMAP_HELVETICA_10;
-		}
+		selected_font = GLUT_BITMAP_HELVETICA_10;
 		break;
 	case glut_HELVETICA_12:
-		{
-			selected_font = GLUT_BITMAP_HELVETICA_12;
-		}
+		selected_font = GLUT_BITMAP_HELVETICA_12;
 		break;
 
 	case glut_HELVETICA_18:
@@ -161,7 +151,7 @@ void menu_handler(int item)
 
 	glutPostRedisplay();
 	cout << "color: " << selected_text_color[0] << " "<< selected_text_color[1] << " "<< selected_text_color[2] << endl;
-			
+
 	return;
 }
 
@@ -173,22 +163,22 @@ std::vector<glChar> text;
 void letterInput(unsigned char key, int xMouse, int yMouse) {
 	switch (key)
 	{
-		case 8:
-			if (text.size() > 0) {
-				text.pop_back();
-				glutPostRedisplay();
-			}
-			break;
-		case 13:
-			glChar enter;
-			enter.setValues('\n', selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
-			text.push_back(enter);
-			break;
-		default:
-			glChar tmp;
-			tmp.setValues(key, selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
-			text.push_back(tmp);
-			break;
+	case 8:
+		if (text.size() > 0) {
+			text.pop_back();
+			glutPostRedisplay();
+		}
+		break;
+	case 13:
+		glChar enter;
+		enter.setValues('\n', selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
+		text.push_back(enter);
+		break;
+	default:
+		glChar tmp;
+		tmp.setValues(key, selected_text_color[0], selected_text_color[1], selected_text_color[2], selected_font);
+		text.push_back(tmp);
+		break;
 	}
 	hasTyped = true;
 	glutPostRedisplay();
@@ -237,23 +227,23 @@ void drawEditor() {
 		float yPosition = pos[1]/1.28 - 300;
 
 		glBegin(GL_LINE_STRIP);
-			glColor3f(selected_text_color[0], selected_text_color[1], selected_text_color[2]);
-			glVertex2i(xPosition + 5, yPosition);
-			glVertex2i(xPosition + 10, yPosition);
-			glVertex2i(xPosition + 10, yPosition + 10);
-			glVertex2i(xPosition + 5, yPosition + 10);
-			glVertex2i(xPosition + 5, yPosition);
+		glColor3f(selected_text_color[0], selected_text_color[1], selected_text_color[2]);
+		glVertex2i(xPosition + 5, yPosition);
+		glVertex2i(xPosition + 10, yPosition);
+		glVertex2i(xPosition + 10, yPosition + 10);
+		glVertex2i(xPosition + 5, yPosition + 10);
+		glVertex2i(xPosition + 5, yPosition);
 		glEnd();
 	}
 	else
 	{
 		glBegin(GL_LINE_STRIP);
-			glColor3f(selected_text_color[0], selected_text_color[1], selected_text_color[2]);
-			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
-			glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 15);
-			glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 5);
-			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 5);
-			glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
+		glColor3f(selected_text_color[0], selected_text_color[1], selected_text_color[2]);
+		glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
+		glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 15);
+		glVertex2i(-typingPositionX + 5, typingPositionY - curRow*rowHeight - 5);
+		glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 5);
+		glVertex2i(-typingPositionX, typingPositionY - curRow*rowHeight - 15);
 		glEnd();
 	}
 }
@@ -275,12 +265,12 @@ void drawMenu() {
 }
 
 void drawInfo() {
-	
+
 	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "This text editor allows you to type text on ");
 	drawText(infoWindow, -190, 240, 1.0, 0.0, 0.0,  "any line. The text editor also allows you to ");
 	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "change color and font for any text typed ");
 	drawText(infoWindow, -190, 200, 1.0, 0.0, 0.0,  "after selecting the new font/color.");
-	
+
 
 	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "Instructions for changing font/color:");
 	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "1. Click the grey menu bar at the top of the");
@@ -305,7 +295,7 @@ void editorInit() {
 void menuInit() {
 	glClearColor(.75, .75, .75, 0);			// specify a background
 	gluOrtho2D(-10, 300,-10, 19);  // specify a viewing area
-	
+
 	textMenu();
 }
 
@@ -314,11 +304,11 @@ void infoInit() {
 	gluOrtho2D(-200, 200, -300, 300);  // specify a viewing area
 }
 
+
 void saveContent(){
 	//FIXME
-	cout<<"save content!";
+	cout<<"Saving content...";
 }
-
 
 //***********************************************************************************
 void myDisplayCallback() {
