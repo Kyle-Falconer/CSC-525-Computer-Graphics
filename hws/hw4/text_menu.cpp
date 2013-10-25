@@ -22,6 +22,7 @@ void textMenu(){
 	glutAddMenuEntry("GLUT_BITMAP_HELVETICA_18", glut_HELVETICA_18);
 
 	menu_main = glutCreateMenu(menu_handler);
+	glutAddSubMenu("Save", save_content);
 	glutAddSubMenu("Colors", submenu_colors);
 	glutAddSubMenu("Fonts", submenu_fonts);
 	glutAddMenuEntry("EXIT", exit_program);
@@ -37,6 +38,10 @@ void menu_handler(int item)
 	switch (item)
 	{
 
+	case save_content:
+		{
+			saveCallback();
+		}
 	case glut_red:
 		{
 			selected_text_color[0] = 1.0;
@@ -107,3 +112,4 @@ void menu_handler(int item)
 			
 	return;
 }
+

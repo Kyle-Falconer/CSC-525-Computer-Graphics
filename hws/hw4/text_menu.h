@@ -5,6 +5,7 @@
 #include "glChar.h"
 
 enum Menu_Option {
+	save_content,
 	glut_red,
 	glut_green,
 	glut_8_BY_13,
@@ -16,6 +17,8 @@ enum Menu_Option {
 	glut_HELVETICA_18,
 	exit_program
 };
+
+
 
 
 
