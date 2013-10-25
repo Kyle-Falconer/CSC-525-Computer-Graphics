@@ -185,8 +185,6 @@ void menu_handler(int item)
 	}
 
 	glutPostRedisplay();
-	cout << "color: " << selected_text_color[0] << " "<< selected_text_color[1] << " "<< selected_text_color[2] << endl;
-
 	return;
 }
 
@@ -220,19 +218,15 @@ void mouseInput(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && !hasTyped) {
 		
 		int yWorld = y/1.28 - 300;
-		cout<<"changing initial cursor position, yWorld: "<< yWorld <<endl;
 		for (int i = 1; i <= 30; i++) {
 			if (typingPositionY - i*rowHeight >= yWorld)
 			{
-				cout <<"found the row"<<endl;
 				curRow = 30-i;
 			}
 		}
-		cout << "new cursor position: "<< curRow << endl;
 		glutPostRedisplay();
 
 	} else {
-		cout<<"button: "<< button <<" "<< state << ", has typed: "<<hasTyped<<endl;
 	}
 }
 
