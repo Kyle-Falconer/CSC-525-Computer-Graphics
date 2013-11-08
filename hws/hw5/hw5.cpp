@@ -3,11 +3,11 @@ PROGRAMMER:			Kyle Falconer
 FOLDERS:			Falconer1
 COURSE:				CSC 525/625
 MODIFIED BY:			N/A
-LAST MODIFIED DATE:	Nov. 7, 2013
+LAST MODIFIED DATE:	Nov. 8, 2013
 DESCRIPTION:		Demonstration of 2D transformations.
 NOTES:				Use the right mouse button to activate the menu.
 					Click and hold the left mouse button, then move the mouse
-					left and right to adjust the value for that transformation.
+					left or right to adjust the value for that transformation.
 
 FILES:					h5.cpp, (hwProject.sln, ...)
 IDE/COMPILER:			MicroSoft Visual Studio 2012
@@ -20,16 +20,9 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 
 #include "glut.h"
 #include <cmath>
+#include <iostream>     // std::cout, std::fixed
+#include <iomanip>      // std::setprecision
 
-
-// To allow file reading
-#include <fstream>
-using std::ifstream;
-
-// To exit if the file doesn't exist
-#include <cstdlib>
-
-bool hasTyped = false;
 
 enum Menu_Option {
 	translate_x,
@@ -42,19 +35,22 @@ enum Menu_Option {
 
 Menu_Option selected_transformation = scale_y;
 
-
-float transformation_scale = 1.0;
-float cumulative_scale = 1.0;
-
 void textMenu();
 void menu_handler(int); // Menu handling function declaration
-void saveContent();
 
 void translateX();
 void translateY();
 void rotateDegrees();
 void scaleX();
 void scaleY();
+
+
+const int window_size[2] = {600, 600};
+
+int last_mouseX = 0;
+int last_mouseY = 0;
+int mousedown_x = 0;
+int mousedown_y = 0;
 
 const int numVertices = 4;
 const int numDimensions = 2;
@@ -79,9 +75,28 @@ float poly_colors[4][3] = {
 	{1.0, 1.0, 0.0}
 };
 
-const int window_size[2] = {600, 600};
-int delta_x = 0;
+void drawAxis(){
 
+	int axis_width_x = window_size[0]/2 -20;
+	int axis_width_y = window_size[1]/2 -20;
+
+	// X-Y axis
+	glPointSize(1);		// change point size back to 1
+	glBegin(GL_POINTS);	// use points to form X-/Y-axes
+	glColor3f(0, 0, 0);			 // change drawing color to black
+	for (int x=-axis_width_x; x<=axis_width_x; x++) // draw X-axis
+		glVertex2i(x, 0);
+	for (int y=-axis_width_y; y<=axis_width_y; y++) // draw Y-axis
+		glVertex2i(0, y);
+	glEnd();
+
+	glRasterPos2i(axis_width_x, -10);
+	glutBitmapCharacter(GLUT_BITMAP_8_BY_13, 'x');
+
+	glRasterPos2i(-10, axis_width_y);
+	glutBitmapCharacter(GLUT_BITMAP_8_BY_13, 'y');
+
+}
 
 
 void textMenu(){
@@ -135,63 +150,42 @@ void menu_handler(int item)
 	return;
 }
 
-void applySelectedTransformation(){
-	switch (selected_transformation)
-	{
 
-	case translate_x:
-		translateX();
-		break;
 
-	case translate_y:
-		translateY();
-		break;
-
-	case rotate_o:
-		rotateDegrees();
-		break;
-
-	case scale_x:
-		scaleX();
-		break;
-
-	case scale_y:
-		scaleY();
-		break;
-	}
-
-}
-
-void translateX(){
-	for (int i = 0; i < sizeof poly; i++){
-		poly[i][0] =poly[i][0] + transformation_scale;
+void translateX(float offset){
+	for (int i = 0; i < numVertices; i++){
+		poly[i][0] = poly[i][0] + offset;
 	}
 }
 
-void translateY(){
-	for (int i = 0; i < sizeof poly; i++){
-		poly[i][1] =poly[i][1] + transformation_scale;
+void translateY(float offset){
+	for (int i = 0; i < numVertices; i++){
+		poly[i][1] = poly[i][1] + offset;
 	}
 }
 
-void rotateDegrees(){
-	float theta = cumulative_scale/180;
-	for (int i = 0; i < sizeof poly; i++){
-		poly[i][0] = orig_poly[i][0] * cos(theta) +  orig_poly[i][1] * sin(theta);
-		poly[i][1] = -orig_poly[i][0] * sin(theta) +  orig_poly[i][1] * cos(theta);
+void rotateDegrees(float degrees){
+	float theta = degrees/180;
+	for (int i = 0; i < numVertices; i++){
+		poly[i][0] = poly[i][0] * cos(theta) +  poly[i][1] * sin(theta);
+		poly[i][1] = -poly[i][0] * sin(theta) +  poly[i][1] * cos(theta);
 	}
 }
 
-void scaleX(){
-	float scale = cumulative_scale/window_size[0]*2;
-	for (int i = 0; i < sizeof poly; i++){
+void scaleX(float scale){
+	scale = scale == 0 ? 0.1 : scale;
+	scale = (scale/(window_size[0]/2))*100;
+	cout << "scale: "<< setprecision(3) << scale << endl;
+	for (int i = 0; i < numVertices; i++){
 		poly[i][0] = orig_poly[i][0] * scale;
 	}
 }
 
-void scaleY(){
-	float scale = cumulative_scale/window_size[0]*2;
-	for (int i = 0; i < sizeof poly; i++){
+void scaleY(float scale){
+	scale = scale == 0 ? 0.1 : scale;
+	scale = (scale/(window_size[1]/2))*100;
+	cout << "scale: "<< setprecision(3) << scale << endl;
+	for (int i = 0; i < numVertices; i++){
 		poly[i][1] = orig_poly[i][1] * scale;
 	}
 }
@@ -215,11 +209,6 @@ void drawPolygon() {
 }
 
 
-void drawMenu() {
-	// FIXME
-	cout << "drawMenu" << endl;
-}
-
 void drawText(int win, float x, float y, float r, float g, float b, std::string text){
 	glutSetWindow(win);
 	glColor3f(1.0, 1.0, 1.0);
@@ -231,9 +220,6 @@ void drawText(int win, float x, float y, float r, float g, float b, std::string 
 		glutBitmapCharacter(font, c);
 	}
 }
-
-
-
 
 void mainInit() {
 	glClearColor(1, 1, 1, 0);			// specify a background
@@ -252,15 +238,12 @@ void menuInit() {
 
 
 
-
-
 //***********************************************************************************
 void myDisplayCallback() {
 	glClear(GL_COLOR_BUFFER_BIT);	// draw the background
 
-	drawMenu();
+	drawAxis();
 
-	applySelectedTransformation();
 	drawPolygon();
 
 	glFlush(); // flush out the buffer contents
@@ -268,19 +251,48 @@ void myDisplayCallback() {
 
 void mouseClick(int button, int state, int x, int y){
 
+	if (state == GLUT_DOWN){
+		mousedown_x = x -  (window_size[0]/2);
+		mousedown_y = (window_size[1]/2) -  y;
+	}
 
 	myDisplayCallback();
 }
 
 void mouseMove(int x, int y){
 	int window_x =  x -  (window_size[0]/2);
+	int window_y =  (window_size[1]/2) -  y;
+	int delta_x = window_x -  last_mouseX;
+	int delta_y = window_y -  last_mouseY;
 
-	cumulative_scale = cumulative_scale + window_x - delta_x; // for rotations and additive transformations
-	transformation_scale =  window_x - delta_x; // for translations and moves
-	delta_x = window_x ;
+	last_mouseX = window_x;
+	last_mouseY = window_y;
+
+	switch (selected_transformation)
+	{
+
+	case translate_x:
+		translateX(delta_x);
+		break;
+
+	case translate_y:
+		translateY(delta_y);
+		break;
+
+	case rotate_o:
+		rotateDegrees(delta_x);
+		break;
+
+	case scale_x:
+		scaleX(mousedown_x - window_x);
+		break;
+
+	case scale_y:
+		scaleY(mousedown_y - window_y);
+		break;
+	}
 
 	myDisplayCallback();
-	cout << "window_x : "<< window_x <<  ", cumulative_scale: "<< cumulative_scale <<", scale: "<< transformation_scale << endl;
 }
 
 
@@ -288,16 +300,15 @@ void mouseMove(int x, int y){
 void main(int argc, char ** argv) {
 	glutInit(& argc, argv);
 
-	glutInitWindowSize(window_size[0], window_size[1]);							// specify a window size
-	glutInitWindowPosition(500, 50);							// specify a window position
-	glutCreateWindow("2D Transformations");	// create a titled window
-	mainInit();									// setting up
-	glutDisplayFunc(myDisplayCallback);		// register a callback
+	glutInitWindowSize(window_size[0], window_size[1]);		// specify a window size
+	glutInitWindowPosition(500, 50);						// specify a window position
+	glutCreateWindow("2D Transformations");					// create a titled window
+	mainInit();												// setting up
+	glutDisplayFunc(myDisplayCallback);						//register a callback
 	textMenu();
 
 	glutMouseFunc(mouseClick);
 	glutMotionFunc(mouseMove);
 
-	glutMainLoop();							// get into an infinite loop
-
+	glutMainLoop();
 }
