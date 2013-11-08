@@ -24,18 +24,12 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\hw4\glut.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\hw4\glChar.h">
+    <ClInclude Include="..\..\hw5\glut.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\hw4\hw4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\hw4\glChar.cpp">
+    <ClCompile Include="..\..\hw5\hw5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
