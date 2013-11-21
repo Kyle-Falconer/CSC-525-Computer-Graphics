@@ -29,7 +29,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\hw5\hw5.cpp">
+    <ClCompile Include="..\..\hw6\hw6.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
