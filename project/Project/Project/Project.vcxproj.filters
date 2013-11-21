@@ -47,5 +47,8 @@
     <ClInclude Include="Vec3_Inline.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="states.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
