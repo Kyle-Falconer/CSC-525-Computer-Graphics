@@ -135,7 +135,6 @@ void drawInfo() {
 
 void display() 
 {
-	drawInfo(); // FIXME 
 
 	glutSetWindow(teapotWindow);
 	// Clear Screen and Depth Buffer
@@ -298,7 +297,6 @@ int main(int argc, char **argv)
 	// initialize and run program
 	glutInit(&argc, argv);          // GLUT initialization
 
-	/*	THIS CRASHES THE PROGRAM - also see line 136 */
 	glutInitWindowSize(384, 576);							// specify a window size
 	glutInitWindowPosition(win.width+75, 50);
 	infoWindow = glutCreateWindow("Info/Help");
