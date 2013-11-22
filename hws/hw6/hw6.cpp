@@ -2,7 +2,7 @@
 PROGRAMMER:			Brett Story,	Kyle Falconer
 FOLDERS:				Brett322,		Falconer1
 BRETT'S TASKS:			Creation of 3D world and camera/perspective controls
-KYLE'S TASKS:			Creation and placement of teapots
+KYLE'S TASKS:			Creation and placement of teapots, info window and context menu.
 COURSE:				CSC 525/625
 LAST MODIFIED DATE:	Nov. 21 2013
 DESCRIPTION:			A demonstration of camera controls and object placement
@@ -118,17 +118,19 @@ void drawText(int win, float x, float y, float r, float g, float b, std::string 
 
 
 void drawInfo() {
-	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "Right-click anywhere and choose an option.");
-	drawText(infoWindow, -190, 240, 1.0, 0.0, 0.0,  "                   -or-                   ");
-	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "Press one of the following keys:");
+	drawText(infoWindow, -190, 280, 1.0, 0.0, 0.0,  "                 101 TEAPOTS             ");
+	drawText(infoWindow, -190, 270, 1.0, 0.0, 0.0,  "------------------------------------------");
+	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "Right-click anywhere in the teapot window.");
+	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "                   -or-                   ");
+	drawText(infoWindow, -190, 180, 1.0, 0.0, 0.0,  "Press one of the following keys:");
 
-	drawText(infoWindow, -190, 200, 1.0, 0.0, 0.0,  "[left arrow] : rotate camera left");
-	drawText(infoWindow, -190, 180, 1.0, 0.0, 0.0,  "[right arrow] : rotate camera right");
-	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "[up arrow] : zoom camera in");
-	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "[down arrow] : zoom camera out");
-	drawText(infoWindow, -190, 120, 1.0, 0.0, 0.0,  "[PgUp] : rotate camera up");
-	drawText(infoWindow, -190, 100, 1.0, 0.0, 0.0,  "[PgDn] : rotate camera down");
-	drawText(infoWindow, -190, 80, 1.0, 0.0, 0.0,  "[Esc] : Exit program");
+	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "[left arrow] : rotate camera left");
+	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "[right arrow] : rotate camera right");
+	drawText(infoWindow, -190, 120, 1.0, 0.0, 0.0,  "[up arrow] : zoom camera in");
+	drawText(infoWindow, -190, 100, 1.0, 0.0, 0.0,  "[down arrow] : zoom camera out");
+	drawText(infoWindow, -190, 80, 1.0, 0.0, 0.0,  "[PgUp] : rotate camera up");
+	drawText(infoWindow, -190, 60, 1.0, 0.0, 0.0,  "[PgDn] : rotate camera down");
+	drawText(infoWindow, -190, 40, 1.0, 0.0, 0.0,  "[Esc] : Exit program");
 }
 
 void display() 
@@ -298,13 +300,15 @@ int main(int argc, char **argv)
 
 	/*	THIS CRASHES THE PROGRAM - also see line 136 */
 	glutInitWindowSize(384, 576);							// specify a window size
-	glutInitWindowPosition(50, 50);							// specify a window position
+	glutInitWindowPosition(win.width+75, 50);
 	infoWindow = glutCreateWindow("Info/Help");
+	glutDisplayFunc(drawInfo);
 	infoInit();
 
 				
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );  // Display Mode
 	glutInitWindowSize(win.width,win.height);				// set window size
+	glutInitWindowPosition(50, 50);
 	teapotWindow = glutCreateWindow(win.title);					// create Window
 	glutDisplayFunc(display);						// register Display Function
 	glutIdleFunc(display);						// register Idle Function
