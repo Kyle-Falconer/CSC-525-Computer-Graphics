@@ -21,6 +21,7 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 #include <GL/glut.h>				// include GLUT library
 #include <cmath>					// include math library
 #include <string>
+#include <time.h>
 using namespace std;
 
 #define KEY_ESCAPE 27
@@ -64,6 +65,34 @@ void rotateRight() {
 		rotAngle -= 180;
 }
 
+
+const int teapotCount = 100;
+float teapot_pos[teapotCount][3];
+float teapot_color[teapotCount][3];
+float teapot_rot[teapotCount][4];
+float teapot_scale[teapotCount];
+void setTeapotValues(){
+	srand ( time(NULL) );
+	for (int i = 0; i < teapotCount; i++){
+		int posNeg = teapotCount/2 > 1 ? -1 : 1;
+		teapot_pos[i][0] = rand() % 10 + 1 ;
+		teapot_pos[i][1] = rand() % 10 + 1;
+		teapot_pos[i][2] = rand() % 10 + 1;
+
+		teapot_rot[i][0] = rand() % 360 + 1;
+		teapot_rot[i][1] = rand() % 10 + 1;
+		teapot_rot[i][2] = rand() % 10 + 1;
+		teapot_rot[i][3] = rand() % 10 + 1;
+
+		teapot_color[i][0] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+		teapot_color[i][1] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+		teapot_color[i][2] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+
+		teapot_scale[i] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+	}
+	cout << "done making the teapot values"<<endl;
+}
+
 void display() 
 {
 	// Clear Screen and Depth Buffer
@@ -80,12 +109,22 @@ void display()
 	// Push and pop the current matrix stack. 
 	// This causes that translations and rotations on this matrix wont influence others.
 
-	glPushMatrix();										
-	glColor3f(1,0,0);
-	glRotatef(90,0,1,0);
+	glPushMatrix();	
 
-	// Draw the teapot
+	// teapot #1
+	glColor3f(1,0,0);
+	glRotatef(90,0,1,0);	
 	glutSolidTeapot(1);
+
+
+	for (int i = 0; i < teapotCount; i++){
+		glTranslatef(teapot_pos[i][0], teapot_pos[i][1], teapot_pos[i][2]);
+		glRotatef(teapot_rot[i][0], teapot_rot[i][1], teapot_rot[i][2], teapot_rot[i][3]);
+		glColor3f(teapot_color[i][0], teapot_color[i][1], teapot_color[i][2]);
+		glutSolidTeapot(teapot_scale[i]);
+	}
+
+
 	glPopMatrix();										  
 
 	g_rotation += g_rotation_speed;
@@ -197,6 +236,8 @@ int main(int argc, char **argv)
 	cam.rotation[0] = 1;
 	cam.rotation[1] = 0;
 	cam.rotation[2] = 0;
+
+	setTeapotValues();
 
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
