@@ -1,12 +1,11 @@
 /*===================================================================================
 PROGRAMMER:			Brett Story,	Kyle Falconer
 FOLDERS:				Brett322,		Falconer1
-BRETT'S TASKS:			FIXME
-KYLE'S TASKS:			FIXME
+BRETT'S TASKS:			Creation of 3D world and camera/perspective controls
+KYLE'S TASKS:			Creation and placement of teapots
 COURSE:				CSC 525/625
 LAST MODIFIED DATE:	Nov. 21 2013
-DESCRIPTION:			FIXME
-NOTE:					FIXME
+DESCRIPTION:			A demonstration of camera controls and object placement
 
 FILES:					hw6.cpp, (hwProject.sln, ...)
 IDE/COMPILER:			MicroSoft Visual Studio 2012
@@ -32,6 +31,8 @@ float teapot_pos[teapotCount][3];
 float teapot_color[teapotCount][3];
 float teapot_rot[teapotCount][4];
 float teapot_scale[teapotCount];
+
+int infoWindow, teapotWindow;
 
 
 typedef struct {
@@ -103,8 +104,38 @@ void setTeapotValues(){
 	cout << "done making the teapot values"<<endl;
 }
 
+void drawText(int win, float x, float y, float r, float g, float b, std::string text){
+	glutSetWindow(win);
+	glColor3f(1.0, 1.0, 1.0);
+	glRasterPos2i(x,y);
+	void * font = GLUT_BITMAP_8_BY_13;
+	for (string::iterator i = text.begin(); i != text.end(); ++i)
+	{
+		char c = *i;
+		glutBitmapCharacter(font, c);
+	}
+}
+
+
+void drawInfo() {
+	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "Right-click anywhere and choose an option.");
+	drawText(infoWindow, -190, 240, 1.0, 0.0, 0.0,  "                   -or-                   ");
+	drawText(infoWindow, -190, 220, 1.0, 0.0, 0.0,  "Press one of the following keys:");
+
+	drawText(infoWindow, -190, 200, 1.0, 0.0, 0.0,  "[left arrow] : rotate camera left");
+	drawText(infoWindow, -190, 180, 1.0, 0.0, 0.0,  "[right arrow] : rotate camera right");
+	drawText(infoWindow, -190, 160, 1.0, 0.0, 0.0,  "[up arrow] : zoom camera in");
+	drawText(infoWindow, -190, 140, 1.0, 0.0, 0.0,  "[down arrow] : zoom camera out");
+	drawText(infoWindow, -190, 120, 1.0, 0.0, 0.0,  "[PgUp] : rotate camera up");
+	drawText(infoWindow, -190, 100, 1.0, 0.0, 0.0,  "[PgDn] : rotate camera down");
+	drawText(infoWindow, -190, 80, 1.0, 0.0, 0.0,  "[Esc] : Exit program");
+}
+
 void display() 
 {
+	drawInfo(); // FIXME 
+
+	glutSetWindow(teapotWindow);
 	// Clear Screen and Depth Buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     
 	glLoadIdentity();
@@ -190,19 +221,6 @@ void initialize ()
 }
 
 
-void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
-{ 
-	switch (key) 
-	{
-	case KEY_ESCAPE:        
-		exit ( 0 );   
-		break;      
-
-	default:      
-		break;
-	}
-}
-
 void keyboardMovement (int key, int x, int y) {
 	switch (key) 
 	{
@@ -226,10 +244,36 @@ void keyboardMovement (int key, int x, int y) {
 	case GLUT_KEY_PAGE_DOWN:
 		cam.height -= 1;
 		break;
+	case 27:
+		exit ( 0 );   
+		break;
 	default:      
 		break;
 	}
 }
+
+void menuListener(int value)
+{
+	keyboardMovement((unsigned char)value, 0, 0);
+}
+
+void menuInit(){
+	glutCreateMenu(menuListener);
+	glutAddMenuEntry("Rotate left [left arrow]", GLUT_KEY_LEFT);
+	glutAddMenuEntry("Rotate right [right arrow]", GLUT_KEY_RIGHT);
+	glutAddMenuEntry("Zoom in [up arrow]", GLUT_KEY_UP);
+	glutAddMenuEntry("Zoom out [down arrow]", GLUT_KEY_DOWN);
+	glutAddMenuEntry("Rotate up [PgUp]", GLUT_KEY_PAGE_UP);
+	glutAddMenuEntry("Rotdate down [PgDn]", GLUT_KEY_PAGE_DOWN);
+	glutAddMenuEntry("Exit [Esc]", 27);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
+void infoInit() {
+	glClearColor(.40, .40, .40, 0);			// specify a background
+	gluOrtho2D(-200, 200, -300, 300);  // specify a viewing area
+}
+
 int main(int argc, char **argv) 
 {
 	// set window values
@@ -250,15 +294,24 @@ int main(int argc, char **argv)
 	setTeapotValues();
 
 	// initialize and run program
-	glutInit(&argc, argv);                                      // GLUT initialization
+	glutInit(&argc, argv);          // GLUT initialization
+
+	/*	THIS CRASHES THE PROGRAM - also see line 136 */
+	glutInitWindowSize(384, 576);							// specify a window size
+	glutInitWindowPosition(50, 50);							// specify a window position
+	infoWindow = glutCreateWindow("Info/Help");
+	infoInit();
+
+				
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );  // Display Mode
 	glutInitWindowSize(win.width,win.height);				// set window size
-	glutCreateWindow(win.title);					// create Window
+	teapotWindow = glutCreateWindow(win.title);					// create Window
 	glutDisplayFunc(display);						// register Display Function
 	glutIdleFunc(display);						// register Idle Function
-	glutKeyboardFunc(keyboard);						// register Keyboard Handler
 	glutSpecialFunc(keyboardMovement);
 	initialize();
+	menuInit();
 	glutMainLoop();							// run GLUT mainloop
+
 	return 0;
 }
