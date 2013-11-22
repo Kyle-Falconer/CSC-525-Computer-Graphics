@@ -27,6 +27,13 @@ using namespace std;
 #define KEY_ESCAPE 27
 #define PI 3.141592653589793 
 
+const int teapotCount = 100;
+float teapot_pos[teapotCount][3];
+float teapot_color[teapotCount][3];
+float teapot_rot[teapotCount][4];
+float teapot_scale[teapotCount];
+
+
 typedef struct {
 	int width;
 	int height;
@@ -65,31 +72,34 @@ void rotateRight() {
 		rotAngle -= 180;
 }
 
+float random(float min, float max){
+	if (max == 1 && min == 0){
+		return ((double) rand() / (RAND_MAX));
+	}
+	return ((float(rand()) / float(RAND_MAX)) * (max - min)) + min;
+}
 
-const int teapotCount = 100;
-float teapot_pos[teapotCount][3];
-float teapot_color[teapotCount][3];
-float teapot_rot[teapotCount][4];
-float teapot_scale[teapotCount];
 void setTeapotValues(){
+	int min = -10;
+	int max = 10;
 	srand ( time(NULL) );
 	for (int i = 0; i < teapotCount; i++){
-		int posNeg = teapotCount/2 > 1 ? -1 : 1;
-		teapot_pos[i][0] = rand() % 10 + 1 ;
-		teapot_pos[i][1] = rand() % 10 + 1;
-		teapot_pos[i][2] = rand() % 10 + 1;
+		teapot_pos[i][0] = random(min, max);
+		teapot_pos[i][1] = random(min, max);
+		teapot_pos[i][2] = random(min, max);
 
-		teapot_rot[i][0] = rand() % 360 + 1;
-		teapot_rot[i][1] = rand() % 10 + 1;
-		teapot_rot[i][2] = rand() % 10 + 1;
-		teapot_rot[i][3] = rand() % 10 + 1;
+		teapot_rot[i][0] = random(0, 360);
+		teapot_rot[i][1] = random(min, max);
+		teapot_rot[i][2] = random(min, max);
+		teapot_rot[i][3] = random(min, max);
 
-		teapot_color[i][0] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
-		teapot_color[i][1] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
-		teapot_color[i][2] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+		teapot_color[i][0] = random(0, 1);
+		teapot_color[i][1] = random(0, 1);
+		teapot_color[i][2] = random(0, 1);
 
-		teapot_scale[i] = posNeg * ((float) rand() / (RAND_MAX)) + 1;
+		teapot_scale[i] = random(0, 1);
 	}
+
 	cout << "done making the teapot values"<<endl;
 }
 
