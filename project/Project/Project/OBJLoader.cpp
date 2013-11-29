@@ -1,307 +1,166 @@
-// <<< Information >>>
-// Author:	Jan Krassnigg (Jan@Krassnigg.de)
-// >>> Information <<<
-
 #include "OBJLoader.h"
-#include <algorithm>
-#include <stdio.h>
-#include <string.h>
 
-
-namespace NS_OBJLOADER
-{
-	using namespace std;
-
-	/* This is a helper-function, you don't need to use it, it is only there for convenience.
-		It iterates over all materials and calls the Loader, provided by the user, for every material (once).
-		"pPassThrough" is passed through to the Loader, which can use it to read or store additional information.
-	*/
-	void LoadTextures (map<string, MATERIAL>& Materials, TEXTURE_LOADER Loader, void* pPassThrough)
-	{
-		map<string, MATERIAL>::iterator it, itend;
-
-		it = Materials.begin ();
-		itend = Materials.end ();
-
-		for (; it != itend; ++it)
-			Loader (it->second, it->second.m_uiMaterialID, pPassThrough);
-	}
-
-	//! Loads an MTL-file and stores all found Materials in the map provided.
-	/*! "sMaterialBasePath" is prepended to every path, which allows to easily make relative paths in the MTL files 
-		into absolute paths. Returns without error, and does nothing, if the file cannot be opened.
-	*/
-	void LoadMTLFile (const char *szFile, map<string, MATERIAL>& Materials, const string& sMaterialBasePath)
-	{
-		FILE* pFile = fopen (szFile, "rb");
-
-		if (!pFile)
-			return;
-
-		// temporary variables for parsing
-		char szLine[1024] = "";
-		char szID[512] = "";
-
-		string sCurrentMaterialName;
-
-		while (fscanf_s (pFile, "%s", szID) > 0)
-		{
-			if (strcmp (szID, "newmtl") == 0)		// declares a new material with a given name
-			{
-				fscanf_s (pFile, "%s", szLine);
-
-				sCurrentMaterialName = szLine;									// keep the name, for lookup
-
-				if (Materials.find (sCurrentMaterialName) == Materials.end ())	// checks, whether a material with the same name is known already
-				{
-					// material is unknown so far, so store it
-					unsigned int uiID = (unsigned int) Materials.size ();						// current (!) size, will be incremented on the next line, when "looking" up the non-existing texture name
-
-					Materials[sCurrentMaterialName].m_uiMaterialID = uiID;		// just store the current number of materials as the ID
-				}
-			}
-			else
-			if (strcmp (szID, "map_Kd") == 0)		// specifies the diffuse texture's path
-			{
-				fscanf (pFile, "%s", szLine);
-
-				Materials[sCurrentMaterialName].m_sDiffuseTexture = sMaterialBasePath + szLine;
-					
-			}
-/*
-			else
-			if (strcmp (szID, "some_other_attrib") == 0)
-			{
-				// if you need to read other attributes from an MTL-file, add this here !
-
-			}
-*/
-			else
-				fgets (szLine, sizeof (char) * 1024, pFile);	// read anything, that is not understood
-		}
-
-		fclose (pFile);
-	}
-
-	bool LoadOBJFile (const char *szFile, MESH& Mesh, map<string, MATERIAL>& Materials, const char* szMaterialBasePath, bool bSortByMaterial, bool bIgnoreMaterials)
-	{
-		// first make sure the mesh is empty
-		Mesh.MakeEmpty ();
-
-		// Materials are NOT cleared, in case one wants to use ONE big map to load all material info into (and thus Material IDs need to be consistent in all meshes)
-
-		// load the information from the MTL file
-		if (!bIgnoreMaterials)
-		{
-			char szMaterial[256] = "";
-			strcpy_s (szMaterial, szFile);
-			szMaterial[strlen (szMaterial) - 3] = '\0';
-			strcat_s (szMaterial, "mtl");
-
-			LoadMTLFile (szMaterial, Materials, szMaterialBasePath);
-		}
-
-		// open and read the OBJ file
-		FILE* pFile = fopen (szFile, "rb");
-
-		if (!pFile)
-			return (false);
-
-		// temporary vairables for parsing
-		char szLine[1024] = "";
-		char szID[512] = "";
-
-		// which data has been found in the file
-		bool bContainsTexCoords = false;
-		bool bContainsNormals = false;
-
-		unsigned int uiCurMaterial = 0;
-
-		while (fscanf_s (pFile, "%s", szID) > 0)
-		{
-			if (strcmp (szID, "v") == 0)	// line declares a vertex
-			{
-				VEC3 v;
-				fscanf (pFile, "%f %f %f", &v.x, &v.y, &v.z);
-
-				Mesh.m_Positions.push_back (v);
-			}
-			else
-			if (strcmp (szID, "vt") == 0)	// line declares a texture coordinate
-			{
-				bContainsTexCoords = true;
-
-				VEC3 v;
-				fscanf (pFile, "%f %f %f", &v.x, &v.y, &v.z);	// reads up to three texture-coordinates, but only two are actually stored
-
-				TEXCOORD tc;
-				tc.m_fTexCoordU = v.x;
-				tc.m_fTexCoordV = v.y;
-				// if you need 3D tex-coords, store the third one here, too
-					
-				Mesh.m_TexCoords.push_back (tc);
-			}
-			else
-			if (strcmp (szID, "vn") == 0)	// line declares a normal
-			{
-				bContainsNormals = true;
-
-				VEC3 v;
-				fscanf (pFile, "%f %f %f", &v.x, &v.y, &v.z);
-				v.Normalize ();	// make sure normals are indeed normalized
-
-				Mesh.m_Normals.push_back (v);
-			}
-			else
-			if (strcmp (szID, "f") == 0)	// line declares a face
-			{
-				FACE Face;
-				Face.m_uiMaterialID = uiCurMaterial;
-
-				// loop through all vertices, that are found
-				while (true)
-				{
-					FACE_VERTEX Vertex;
-
-					// read the position index
-					if (fscanf_s (pFile, "%i", &Vertex.m_uiPositionID) <= 0)
-						break;	// nothing found, face-declaration is finished
-
-					--Vertex.m_uiPositionID;		// OBJ indices start at 1, so decrement them to start at 0
-
-					// texcoords were declared, so they will be used in the faces
-					if (bContainsTexCoords)
-					{
-						if (fscanf (pFile, "/%i", &Vertex.m_uiTexCoordID) <= 0)
-							break;
-
-						--Vertex.m_uiTexCoordID;	// OBJ indices start at 1, so decrement them to start at 0
-					}
-
-					// normals were declared, so they will be used in the faces
-					if (bContainsNormals)
-					{
-						if (fscanf (pFile, "/%i", &Vertex.m_uiNormalID) <= 0)
-							break;
+/*************************************************************************** 
+  OBJ Loading 
+ ***************************************************************************/
  
-						--Vertex.m_uiNormalID;		// OBJ indices start at 1, so decrement them to start at 0
-					}
-
-					// stores the next vertex of the face
-					Face.m_Vertices.push_back (Vertex);
-				}
-
-				// only allow faces with at least 3 vertices
-				if (Face.m_Vertices.size () >= 3)
-				{
-					VEC3 v1, v2, v3;
-					v1 = Mesh.m_Positions[Face.m_Vertices[0].m_uiPositionID];
-					v2 = Mesh.m_Positions[Face.m_Vertices[1].m_uiPositionID];
-					v3 = Mesh.m_Positions[Face.m_Vertices[2].m_uiPositionID];
-
-					Face.m_vNormal.CalculateNormal (v1, v2, v3);
-
-					// done reading the face, store it
-					Mesh.m_Faces.push_back (Face);
-				}
-			}
-			else
-			if (strcmp (szID, "usemtl") == 0)		// next material to be used for the following faces
-			{
-				char szMaterial[256] = "";
-				fscanf_s (pFile, "%s", &szMaterial[0]);
-
-				if (bIgnoreMaterials)
-					uiCurMaterial = 0;
-				else
-				{
-					// look-up the ID of this material
-					uiCurMaterial = Materials[szMaterial].m_uiMaterialID;
-				}
-			}
-/*
-			else
-			if (strcmp (szID, "some_other_attrib") == 0)
-			{
-				// read any other attribute, that you might need, here
-			}
-*/
-			else
-				fgets (szLine, sizeof (char) * 1024, pFile);	// read anything else, that is not understood
-		}
-
-		fclose (pFile);
-
-		if (bSortByMaterial)
-		{
-			// sort all faces by material-ID
-			sort (Mesh.m_Faces.begin (), Mesh.m_Faces.end ());
-		}
-
-		Mesh.ComputeTangentSpaceVectors ();
-
-		return (true);
-	}
-
-	void MESH::ComputeTangentSpaceVectors (void)
-	{
-		for (int i = 0; i < (int) m_Faces.size (); ++i)
-			m_Faces[i].ComputeTangentSpaceVectors (*this);
-	}
-
-	void FACE::ComputeTangentSpaceVectors (const MESH& Mesh)
-	{
-		// cannot compute tangents without texture-coordinates
-		if (Mesh.m_TexCoords.empty ())
-			return;
-
-		const VEC3 p1 = Mesh.m_Positions[m_Vertices[0].m_uiPositionID];
-		const VEC3 p2 = Mesh.m_Positions[m_Vertices[1].m_uiPositionID];
-		const VEC3 p3 = Mesh.m_Positions[m_Vertices[2].m_uiPositionID];
-
-		const TEXCOORD tc1 = Mesh.m_TexCoords[m_Vertices[0].m_uiTexCoordID];
-		const TEXCOORD tc2 = Mesh.m_TexCoords[m_Vertices[1].m_uiTexCoordID];
-		const TEXCOORD tc3 = Mesh.m_TexCoords[m_Vertices[2].m_uiTexCoordID];
-
-
-
-
-		// Calculate the vectors from the current vertex to the two other vertices in the triangle
-		VEC3 v2v1 = p2 - p1;
-		VEC3 v3v1 = p3 - p1;
-
-		// The equation presented in the article states that:
-
-		// Calculate c2c1_T and c2c1_B
-		float c2c1_T = tc2.m_fTexCoordU - tc1.m_fTexCoordU;
-		float c2c1_B = tc2.m_fTexCoordV - tc1.m_fTexCoordV;
-
-		// Calculate c3c1_T and c3c1_B
-		float c3c1_T = tc3.m_fTexCoordU - tc1.m_fTexCoordU;
-		float c3c1_B = tc3.m_fTexCoordV - tc1.m_fTexCoordV;
-
-		float fDenominator = c2c1_T * c3c1_B - c3c1_T * c2c1_B;
-
-		// Calculate the reciprocal value once and for all (to achieve speed)
-		float fScale1 = 1.0f / fDenominator;
-
-		// T and B are calculated just as the equation in the article states
-		VEC3 T, B;
-		T = VEC3 ((c3c1_B * v2v1.x - c2c1_B * v3v1.x) * fScale1,
-				(c3c1_B * v2v1.y - c2c1_B * v3v1.y) * fScale1,
-				(c3c1_B * v2v1.z - c2c1_B * v3v1.z) * fScale1);
-
-		B = VEC3 ((-c3c1_T * v2v1.x + c2c1_T * v3v1.x) * fScale1,
-				(-c3c1_T * v2v1.y + c2c1_T * v3v1.y) * fScale1,
-				(-c3c1_T * v2v1.z + c2c1_T * v3v1.z) * fScale1);
-
-
-		T.Normalize ();
-		B.Normalize ();
-
-
-		m_vTangent = T;
-		m_vBiTangent = cross (m_vNormal, m_vTangent).getNormalized ();
-	}
+Model_OBJ::Model_OBJ()
+{
+	this->TotalConnectedTriangles = 0; 
+	this->TotalConnectedPoints = 0;
 }
-
+ 
+float* Model_OBJ::calculateNormal( float *coord1, float *coord2, float *coord3 )
+{
+   /* calculate Vector1 and Vector2 */
+   float va[3], vb[3], vr[3], val;
+   va[0] = coord1[0] - coord2[0];
+   va[1] = coord1[1] - coord2[1];
+   va[2] = coord1[2] - coord2[2];
+ 
+   vb[0] = coord1[0] - coord3[0];
+   vb[1] = coord1[1] - coord3[1];
+   vb[2] = coord1[2] - coord3[2];
+ 
+   /* cross product */
+   vr[0] = va[1] * vb[2] - vb[1] * va[2];
+   vr[1] = vb[0] * va[2] - va[0] * vb[2];
+   vr[2] = va[0] * vb[1] - vb[0] * va[1];
+ 
+   /* normalization factor */
+   val = sqrt( vr[0]*vr[0] + vr[1]*vr[1] + vr[2]*vr[2] );
+ 
+	float norm[3];
+	norm[0] = vr[0]/val;
+	norm[1] = vr[1]/val;
+	norm[2] = vr[2]/val;
+ 
+ 
+	return norm;
+}
+ 
+ 
+int Model_OBJ::Load(std::string filename)
+{
+	string line;
+	ifstream objFile (filename + ".obj");	
+	if (objFile.is_open())													// If obj file is open, continue
+	{
+		objFile.seekg (0, ios::end);										// Go to end of the file, 
+		long fileSize = objFile.tellg();									// get file size
+		objFile.seekg (0, ios::beg);										// we'll use this to register memory for our 3d model
+ 
+		vertexBuffer = (float*) malloc (fileSize);							// Allocate memory for the verteces
+		Faces_Triangles = (float*) malloc(fileSize*sizeof(float));			// Allocate memory for the triangles
+		normals  = (float*) malloc(fileSize*sizeof(float));					// Allocate memory for the normals
+ 
+		int triangle_index = 0;												// Set triangle index to zero
+		int normal_index = 0;												// Set normal index to zero
+ 
+		while (! objFile.eof() )											// Start reading file data
+		{		
+			getline (objFile,line);											// Get line from file
+ 
+			if (line.c_str()[0] == 'v')										// The first character is a v: on this line is a vertex stored.
+			{
+				line[0] = ' ';												// Set first character to 0. This will allow us to use sscanf
+ 
+				sscanf(line.c_str(),"%f %f %f ",							// Read floats from the line: v X Y Z
+					&vertexBuffer[TotalConnectedPoints],
+					&vertexBuffer[TotalConnectedPoints+1], 
+					&vertexBuffer[TotalConnectedPoints+2]);
+ 
+				TotalConnectedPoints += POINTS_PER_VERTEX;					// Add 3 to the total connected points
+			}
+			if (line.c_str()[0] == 'f')										// The first character is an 'f': on this line is a point stored
+			{
+		    	line[0] = ' ';												// Set first character to 0. This will allow us to use sscanf
+ 
+				int vertexNumber[4] = { 0, 0, 0 };
+                sscanf(line.c_str(),"%i%i%i",								// Read integers from the line:  f 1 2 3
+					&vertexNumber[0],										// First point of our triangle. This is an 
+					&vertexNumber[1],										// pointer to our vertexBuffer list
+					&vertexNumber[2] );										// each point represents an X,Y,Z.
+ 
+				vertexNumber[0] -= 1;										// OBJ file starts counting from 1
+				vertexNumber[1] -= 1;										// OBJ file starts counting from 1
+				vertexNumber[2] -= 1;										// OBJ file starts counting from 1
+ 
+ 
+				/********************************************************************
+				 * Create triangles (f 1 2 3) from points: (v X Y Z) (v X Y Z) (v X Y Z). 
+				 * The vertexBuffer contains all verteces
+				 * The triangles will be created using the verteces we read previously
+				 */
+ 
+				int tCounter = 0;
+				for (int i = 0; i < POINTS_PER_VERTEX; i++)					
+				{
+					Faces_Triangles[triangle_index + tCounter   ] = vertexBuffer[3*vertexNumber[i] ];
+					Faces_Triangles[triangle_index + tCounter +1 ] = vertexBuffer[3*vertexNumber[i]+1 ];
+					Faces_Triangles[triangle_index + tCounter +2 ] = vertexBuffer[3*vertexNumber[i]+2 ];
+					tCounter += POINTS_PER_VERTEX;
+				}
+ 
+				/*********************************************************************
+				 * Calculate all normals, used for lighting
+				 */ 
+				float coord1[3] = { Faces_Triangles[triangle_index], Faces_Triangles[triangle_index+1],Faces_Triangles[triangle_index+2]};
+				float coord2[3] = {Faces_Triangles[triangle_index+3],Faces_Triangles[triangle_index+4],Faces_Triangles[triangle_index+5]};
+				float coord3[3] = {Faces_Triangles[triangle_index+6],Faces_Triangles[triangle_index+7],Faces_Triangles[triangle_index+8]};
+				float *norm = this->calculateNormal( coord1, coord2, coord3 );
+ 
+				tCounter = 0;
+				for (int i = 0; i < POINTS_PER_VERTEX; i++)
+				{
+					normals[normal_index + tCounter ] = norm[0];
+					normals[normal_index + tCounter +1] = norm[1];
+					normals[normal_index + tCounter +2] = norm[2];
+					tCounter += POINTS_PER_VERTEX;
+				}
+ 
+				triangle_index += TOTAL_FLOATS_IN_TRIANGLE;
+				normal_index += TOTAL_FLOATS_IN_TRIANGLE;
+				TotalConnectedTriangles += TOTAL_FLOATS_IN_TRIANGLE;			
+			}	
+		}
+		objFile.close();														// Close OBJ file
+	}
+	else 
+	{
+		cout << "Unable to open file";								
+	}
+	//loads color;
+	ifstream colFile (filename + ".txt");	
+	if (colFile.is_open()) {
+		colFile >> color[0];
+		colFile >> color[1];
+		colFile >> color[2];
+		colFile.close();
+	}
+	else {
+		color[0] = 0;
+		color[1] = 0;
+		color[2] = 0;
+	}
+	return 0;
+}
+ 
+void Model_OBJ::Release()
+{
+	free(this->Faces_Triangles);
+	free(this->normals);
+	free(this->vertexBuffer);
+}
+ 
+void Model_OBJ::Draw()
+{
+ 	glEnableClientState(GL_VERTEX_ARRAY);						// Enable vertex arrays
+ 	glEnableClientState(GL_NORMAL_ARRAY);						// Enable normal arrays
+	glVertexPointer(3,GL_FLOAT,	0,Faces_Triangles);				// Vertex Pointer to triangle array
+	glNormalPointer(GL_FLOAT, 0, normals);						// Normal pointer to normal array
+	glColor3f(color[0], color[1], color[2]);
+	glDrawArrays(GL_TRIANGLES, 0, TotalConnectedTriangles);		// Draw the triangles
+	glDisableClientState(GL_VERTEX_ARRAY);						// Disable vertex arrays
+	glDisableClientState(GL_NORMAL_ARRAY);						// Disable normal arrays
+}

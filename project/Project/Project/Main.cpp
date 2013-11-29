@@ -22,7 +22,6 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 #include <cmath>					// include math library
 #include <string>
 #include "OBJLoader.h"
-using namespace std;
 
 #define KEY_ESCAPE 27
 
@@ -30,6 +29,8 @@ int mainWindow;
 int viewWindow;
 int bottomWindow;
 int mapWindow;
+
+Model_OBJ obj;
 
 typedef struct {
 	int width;
@@ -87,7 +88,8 @@ void viewDisplay()
 	glRotatef(90,0,1,0);
 
 	// Draw the teapot
-	glutSolidTeapot(1);
+	//glutSolidTeapot(1);
+	obj.Draw();
 	glPopMatrix();										  
 
 	/*
@@ -261,5 +263,6 @@ void main(int argc, char **argv)
 	viewInit();
 	bottomInit();
 	mapInit();
+	obj.Load("meshes/untitled");
 	glutMainLoop();												// run GLUT mainloop
 }
