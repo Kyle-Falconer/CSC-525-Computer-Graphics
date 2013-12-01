@@ -22,6 +22,7 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 #include <cmath>					// include math library
 #include <string>
 #include "OBJLoader.h"
+#include "states.h"
 
 #define KEY_ESCAPE 27
 
@@ -31,6 +32,7 @@ int bottomWindow;
 int mapWindow;
 
 Model_OBJ obj;
+FSM* statemachine;
 
 typedef struct {
 	int width;
@@ -123,8 +125,9 @@ void bottomDisplay() {
 
 	drawWindowBox(bottom);
 
-	drawText(bottomWindow, -bottom.width / 2 + 50, bottom.height / 2 - 70, 1, 1, 1, 2,  "1 - First Option");
-	drawText(bottomWindow, -bottom.width / 2 + 50, -bottom.height / 2 + 70, 1, 1, 1, 2,  "2 - Second Option");
+	const std::string* transitionLabels = statemachine->getAvailableTransitionNames();
+	drawText(bottomWindow, -bottom.width / 2 + 50, bottom.height / 2 - 70, 1, 1, 1, 2,  "1 - " + transitionLabels[0]);
+	drawText(bottomWindow, -bottom.width / 2 + 50, -bottom.height / 2 + 70, 1, 1, 1, 2,  "2 - " + transitionLabels[1]);
 
 	glutSwapBuffers();
 }
@@ -200,6 +203,14 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 		exit(0);   
 		break;      
 
+	case '1':
+		statemachine->chooseFirstTransition();
+		break;
+
+	case '2':
+		statemachine->chooseSecondTransition();
+		break;
+
 	default:      
 		break;
 	}
@@ -254,6 +265,8 @@ void mainInit() {
 	glClearColor(0, 0, 0, 0);
 }
 
+
+
 void main(int argc, char **argv) 
 {
 	// initialize and run program
@@ -263,6 +276,7 @@ void main(int argc, char **argv)
 	viewInit();
 	bottomInit();
 	mapInit();
+	statemachine = new FSM();
 	obj.Load("meshes/untitled");
 	glutMainLoop();												// run GLUT mainloop
 }
