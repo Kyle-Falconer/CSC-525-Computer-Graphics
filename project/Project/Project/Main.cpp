@@ -31,7 +31,7 @@ int viewWindow;
 int bottomWindow;
 int mapWindow;
 
-Model_OBJ obj;
+Model_OBJ obj[9];
 FSM* statemachine;
 
 typedef struct {
@@ -78,20 +78,27 @@ void viewDisplay()
 	glLoadIdentity();
 
 	// Define a viewing transformation
-	gluLookAt( 4,2,0, 0,0,0, 0,1,0);					  
+	gluLookAt(4,2,0, 0,1,0, 0,1,0);	
 
 	// Push and pop the current matrix stack. 
 	// This causes that translations and rotations on this matrix wont influence others.
 
 	glPushMatrix();										
-	glColor3f(1,0,0);
 	glTranslatef(0,0,0);							
-	glRotatef(g_rotation,0,1,0);
-	glRotatef(90,0,1,0);
+	glScalef(0.25, 0.25, 0.25);
 
 	// Draw the teapot
 	//glutSolidTeapot(1);
-	obj.Draw();
+	obj[0].Draw();
+	obj[1].Draw();
+	obj[2].Draw();
+	obj[3].Draw();
+	obj[4].Draw();
+	obj[5].Draw();
+	obj[6].Draw();
+	obj[7].Draw();
+	obj[8].Draw();
+
 	glPopMatrix();										  
 
 	/*
@@ -178,9 +185,9 @@ void initialize ()
 	// specify implementation-specific hints
 	glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );						
 
-	GLfloat amb_light[] = { 0.1, 0.1, 0.1, 1.0 };
-	GLfloat diffuse[] = { 0.6, 0.6, 0.6, 1 };
-	GLfloat specular[] = { 0.7, 0.7, 0.3, 1 };
+	GLfloat amb_light[] = { 0.1, 0.1, 0.1, 0.5 };
+	GLfloat diffuse[] = { 0.3, 0.3, 0.3, 1};
+	GLfloat specular[] = { 0.1, 0.1, 0.1, 0.5};
 	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, amb_light );
 	glLightfv( GL_LIGHT0, GL_DIFFUSE, diffuse );
 	glLightfv( GL_LIGHT0, GL_SPECULAR, specular );
@@ -277,6 +284,14 @@ void main(int argc, char **argv)
 	bottomInit();
 	mapInit();
 	statemachine = new FSM();
-	obj.Load("meshes/untitled");
+	obj[0].Load("scenes/0home/tv01");
+	obj[1].Load("scenes/0home/tv02");
+	obj[2].Load("scenes/0home/tv03");
+	obj[3].Load("scenes/0home/tvstand");
+	obj[4].Load("scenes/0home/couch");
+	obj[5].Load("scenes/0home/floor");
+	obj[6].Load("scenes/0home/walls");
+	obj[7].Load("scenes/0home/ceiling");
+	obj[8].Load("scenes/0home/trim");
 	glutMainLoop();												// run GLUT mainloop
 }
