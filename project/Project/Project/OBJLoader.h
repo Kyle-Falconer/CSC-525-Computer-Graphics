@@ -1,17 +1,11 @@
 //OBJ loader from http://openglsamples.sourceforge.net/
 //Modified for color
 
-#include <iostream>
-#include <GL/glut.h>				// include GLUT library
 #include <fstream>
-#include <stdio.h>
-#include <string.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <string>
-#include <vector>
-#include <cmath>
+#include <glut.h>
 
 class Model_OBJ
 {
