@@ -25,8 +25,14 @@ const int* FSM::getAvailableTransitions(){
 }
 
 const std::string* FSM::getAvailableTransitionNames(){
-	const int* possibleTransitions = this->getAvailableTransitions();
-	this->availableTransitionNames[0] = transitionlabels[this->current_state][0];
+	std::string status;
+	if (this->current_state == 0){
+		status = failureReasonMessages[this->last_state];
+	} else {
+		status = transitionlabels[this->current_state][0];
+	}
+
+	this->availableTransitionNames[0] = status;
 	this->availableTransitionNames[1] = transitionlabels[this->current_state][1];
 	this->availableTransitionNames[2] = transitionlabels[this->current_state][2];
 	return this->availableTransitionNames;

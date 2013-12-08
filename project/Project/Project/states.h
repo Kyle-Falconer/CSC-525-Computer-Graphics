@@ -32,6 +32,19 @@ const int transitions[NUM_STATES][2] = {
 	{9, 9}
 };
 
+const std::string failureReasonMessages[NUM_STATES] = {
+	"",
+	"Your boss saw you leave without working and have now been fired.",
+	"",
+	"You have been eaten by a grue.",
+	"",
+	"",
+	"You ate a rotten hot dog and now have food poisoning.",
+	"",
+	"",
+	""
+};
+
 
 
 class FSM
