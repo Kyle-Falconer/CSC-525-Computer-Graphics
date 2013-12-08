@@ -162,34 +162,18 @@ void displayCallback() {
 
 void initialize () 
 {
-	// select projection matrix
 	glMatrixMode(GL_PROJECTION);												
-
-	// set the viewport
 	glViewport(0, 0, view.width, view.height);									
-
-	// set matrix mode
 	glMatrixMode(GL_PROJECTION);												
-
-	// reset projection matrix
 	glLoadIdentity();															
 	GLfloat aspect = (GLfloat) view.width / (view.height);
-
-	// set up a perspective projection matrix
 	gluPerspective(view.field_of_view_angle, aspect, view.z_near, view.z_far);		
-
-	// specify which matrix is the current matrix
 	glMatrixMode(GL_MODELVIEW);													
 	glShadeModel( GL_SMOOTH );
-
-	// specify the clear value for the depth buffer
 	glClearDepth( 1.0f );														
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LEQUAL );
-
-	// specify implementation-specific hints
 	glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );						
-
 	GLfloat amb_light[] = { 0.1, 0.1, 0.1, 0.5 };
 	GLfloat diffuse[] = { 0.3, 0.3, 0.3, 1};
 	GLfloat specular[] = { 0.1, 0.1, 0.1, 0.5};
