@@ -21,8 +21,8 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 #include <GL/glut.h>				// include GLUT library
 #include <cmath>					// include math library
 #include <string>
-#include "OBJLoader.h"
 #include "states.h"
+#include "display.h"
 
 #define KEY_ESCAPE 27
 
@@ -33,6 +33,7 @@ int mapWindow;
 
 Model_OBJ obj[9];
 FSM* statemachine;
+display displayer;
 
 typedef struct {
 	int width;
@@ -74,43 +75,12 @@ void viewDisplay()
 {
 	glutSetWindow(viewWindow);
 	// Clear Screen and Depth Buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		     
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		
 	glLoadIdentity();
 
-	// Define a viewing transformation
-	gluLookAt(4,2,0, 0,1,0, 0,1,0);	
-
-	// Push and pop the current matrix stack. 
-	// This causes that translations and rotations on this matrix wont influence others.
-
-	glPushMatrix();										
-	glTranslatef(0,0,0);							
-	glScalef(0.25, 0.25, 0.25);
-
-	// Draw the teapot
-	//glutSolidTeapot(1);
-	obj[0].Draw();
-	obj[1].Draw();
-	obj[2].Draw();
-	obj[3].Draw();
-	obj[4].Draw();
-	obj[5].Draw();
-	obj[6].Draw();
-	obj[7].Draw();
-	obj[8].Draw();
-
+	displayer.render0();
+	
 	glPopMatrix();										  
-
-	/*
-	NS_OBJLOADER::MESH coffee_cup_mesh;
-	map<string, NS_OBJLOADER::MATERIAL> MyMaterials;
-	if (LoadOBJFile ("Project\\Meshes\\coffee_cup.obj", coffee_cup_mesh, MyMaterials, "Project\\Textures\\"))
-	{
-		//
-	}
-	*/
-
-	g_rotation += g_rotation_speed;
 	glutSwapBuffers();
 }
 
@@ -284,14 +254,6 @@ void main(int argc, char **argv)
 	bottomInit();
 	mapInit();
 	statemachine = new FSM();
-	obj[0].Load("scenes/0home/tv01");
-	obj[1].Load("scenes/0home/tv02");
-	obj[2].Load("scenes/0home/tv03");
-	obj[3].Load("scenes/0home/tvstand");
-	obj[4].Load("scenes/0home/couch");
-	obj[5].Load("scenes/0home/floor");
-	obj[6].Load("scenes/0home/walls");
-	obj[7].Load("scenes/0home/ceiling");
-	obj[8].Load("scenes/0home/trim");
+
 	glutMainLoop();												// run GLUT mainloop
 }
