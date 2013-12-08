@@ -1,0 +1,10 @@
+# Blender v2.68 (sub 0) OBJ File: 'thirdfloor.blend'
+# www.blender.org
+o Mesh14_Group1_Office_Layout1_Model
+v -8.869438 0.092765 6.342845
+v 9.671030 0.092765 6.342845
+v 9.671030 0.092768 -6.764406
+v -8.869438 0.092768 -6.764406
+s off
+f 1 2 4
+f 2 3 4

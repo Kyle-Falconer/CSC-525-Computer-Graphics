@@ -28,29 +28,71 @@ void display::initRenders() {
 	sceneObjects[2][3].Load("scenes/2secretary/floor");
 	sceneObjects[2][4].Load("scenes/2secretary/walls");
 
+	sceneObjects[3][0].Load("scenes/3humanresources/blue");
+	sceneObjects[3][1].Load("scenes/3humanresources/black");
+	sceneObjects[3][2].Load("scenes/3humanresources/grey");
+	sceneObjects[3][3].Load("scenes/3humanresources/walls");
+
+	sceneObjects[5][0].Load("scenes/5secondfloor/brown");
+	sceneObjects[5][1].Load("scenes/5secondfloor/green");
+	sceneObjects[5][2].Load("scenes/5secondfloor/grey");
+	sceneObjects[5][3].Load("scenes/5secondfloor/yellow");
+
+	sceneObjects[6][0].Load("scenes/6foodcourt/brown");
+	sceneObjects[6][1].Load("scenes/6foodcourt/black");
+	sceneObjects[6][2].Load("scenes/6foodcourt/grey");
+	sceneObjects[6][3].Load("scenes/6foodcourt/red");
+	sceneObjects[6][4].Load("scenes/6foodcourt/white");
+
 	sceneObjects[7][0].Load("scenes/7stairs/stairs");
 	sceneObjects[7][1].Load("scenes/7stairs/floors");
 	sceneObjects[7][2].Load("scenes/7stairs/railings");
 	sceneObjects[7][3].Load("scenes/7stairs/walls");
+
+	sceneObjects[8][0].Load("scenes/8thirdfloor/black");
+	sceneObjects[8][1].Load("scenes/8thirdfloor/brown");
+	sceneObjects[8][2].Load("scenes/8thirdfloor/floor");
+	sceneObjects[8][3].Load("scenes/8thirdfloor/white");
+
+	sceneObjects[9][0].Load("scenes/9desk/black");
+	sceneObjects[9][1].Load("scenes/9desk/blue");
+	sceneObjects[9][2].Load("scenes/9desk/brown");
+	sceneObjects[9][3].Load("scenes/9desk/grey");
+	sceneObjects[9][4].Load("scenes/9desk/white");
 }
 
 //Desk
 void display::render9() {
+	gluLookAt(2.5,2,-2, 0,1.5,0, 0,1,0);	
 
+	glPushMatrix();										
+	glTranslatef(0,0,0);							
+	glScalef(0.25, 0.25, 0.25);
+
+	sceneObjects[9][0].Draw();
+	sceneObjects[9][1].Draw();
+	sceneObjects[9][2].Draw();
+	sceneObjects[9][3].Draw();
+	sceneObjects[9][4].Draw();
 }
 
 //Third floor
 void display::render8() {
+	gluLookAt(2,2,-1, 0,0,0, 0,1,0);	
 
+	glPushMatrix();										
+	glTranslatef(0,0,0);							
+	glScalef(0.25, 0.25, 0.25);
+
+	sceneObjects[8][0].Draw();
+	sceneObjects[8][1].Draw();
+	sceneObjects[8][2].Draw();
+	sceneObjects[8][3].Draw();
 }
 
 // Stairs
 void display::render7() {
-	// Define a viewing transformation
 	gluLookAt(1,3,0.5, -3,0,0, 0,1,0);	
-
-	// Push and pop the current matrix stack. 
-	// This causes that translations and rotations on this matrix wont influence others.
 
 	glPushMatrix();										
 	glTranslatef(0,0,0);							
@@ -64,22 +106,35 @@ void display::render7() {
 
 // Food Court
 void display::render6() {
+	gluLookAt(3,1,-1, 0,.5,-0.5, 0,1,0);	
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
 
+	sceneObjects[6][0].Draw();
+	sceneObjects[6][1].Draw();
+	sceneObjects[6][2].Draw();
+	sceneObjects[6][3].Draw();
+	sceneObjects[6][4].Draw();
 }
 
 // Second floor
 void display::render5() {
+	gluLookAt(4,5,-2, 0,4,-1, 0,1,0);	
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
 
+	sceneObjects[5][0].Draw();
+	sceneObjects[5][1].Draw();
+	sceneObjects[5][2].Draw();
+	sceneObjects[5][3].Draw();
 }
 
 // Window
 void display::render4() {
-	glClearColor(0.2, 0.4, 0.8, 1);			// specify a background
-	// Define a viewing transformation
+	glClearColor(0.2, 0.4, 0.8, 1);	
 	gluLookAt(2,1,0, 1,1.5,2, 0,1,0);
-
-	// Push and pop the current matrix stack. 
-	// This causes that translations and rotations on this matrix wont influence others.
 
 	glPushMatrix();										
 	glTranslatef(0,0,0);
@@ -95,7 +150,15 @@ void display::render4() {
 
 // Human resources
 void display::render3() {
+	gluLookAt(1,1.25,1, 0,1.1,.5, 0,1,0);	
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
 
+	sceneObjects[3][0].Draw();
+	sceneObjects[3][1].Draw();
+	sceneObjects[3][2].Draw();
+	sceneObjects[3][3].Draw();
 }
 
 // Secretary
@@ -114,12 +177,8 @@ void display::render2() {
 
 // Doors
 void display::render1() {
-	glClearColor(0.2, 0.4, 0.8, 1);			// specify a background
-	// Define a viewing transformation
+	glClearColor(0.2, 0.4, 0.8, 1);	
 	gluLookAt(.5,0.25,1.5, 2,0,1, 0,1,0);	
-
-	// Push and pop the current matrix stack. 
-	// This causes that translations and rotations on this matrix wont influence others.
 
 	glPushMatrix();										
 	glTranslatef(0,0,0);
@@ -135,11 +194,7 @@ void display::render1() {
 
 // Home
 void display::render0() {
-	// Define a viewing transformation
 	gluLookAt(4,3,0, 0,2,0, 0,1,0);	
-
-	// Push and pop the current matrix stack. 
-	// This causes that translations and rotations on this matrix wont influence others.
 
 	glPushMatrix();										
 	glTranslatef(0,0,0);							
