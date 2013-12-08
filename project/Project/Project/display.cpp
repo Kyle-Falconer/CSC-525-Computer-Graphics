@@ -22,6 +22,12 @@ void display::initRenders() {
 	sceneObjects[1][4].Load("scenes/4window/lamppost");
 	sceneObjects[1][5].Load("scenes/4window/ground");
 
+	sceneObjects[2][0].Load("scenes/2secretary/brown");
+	sceneObjects[2][1].Load("scenes/2secretary/black");
+	sceneObjects[2][2].Load("scenes/2secretary/grey");
+	sceneObjects[2][3].Load("scenes/2secretary/floor");
+	sceneObjects[2][4].Load("scenes/2secretary/walls");
+
 	sceneObjects[7][0].Load("scenes/7stairs/stairs");
 	sceneObjects[7][1].Load("scenes/7stairs/floors");
 	sceneObjects[7][2].Load("scenes/7stairs/railings");
@@ -94,7 +100,16 @@ void display::render3() {
 
 // Secretary
 void display::render2() {
+	gluLookAt(-1.5,1.1,-1, -1,.5,1, 0,1,0);	
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
 
+	sceneObjects[2][0].Draw();
+	sceneObjects[2][1].Draw();
+	sceneObjects[2][2].Draw();
+	sceneObjects[2][3].Draw();
+	sceneObjects[2][4].Draw();
 }
 
 // Doors

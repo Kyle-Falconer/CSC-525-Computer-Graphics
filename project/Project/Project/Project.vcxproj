@@ -84,6 +84,7 @@
     <ClCompile Include="TGALoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="display.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="states.h" />
     <ClInclude Include="TGALoader.h" />

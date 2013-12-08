@@ -56,5 +56,8 @@
     <ClInclude Include="states.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="display.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
