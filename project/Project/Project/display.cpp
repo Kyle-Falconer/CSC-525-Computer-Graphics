@@ -70,7 +70,7 @@ void display::render5() {
 void display::render4() {
 	glClearColor(0.2, 0.4, 0.8, 1);			// specify a background
 	// Define a viewing transformation
-	gluLookAt(2,1,0, 0,-2 ,0, 0,1,0);
+	gluLookAt(2,1,0, 1,1.5,2, 0,1,0);
 
 	// Push and pop the current matrix stack. 
 	// This causes that translations and rotations on this matrix wont influence others.
