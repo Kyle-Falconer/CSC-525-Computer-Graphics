@@ -3,7 +3,7 @@
 class display
 {
   public: 
-    display();			
+	display();			
 	Model_OBJ sceneObjects[10][10];
 	void initRenders();
 	void render0();
