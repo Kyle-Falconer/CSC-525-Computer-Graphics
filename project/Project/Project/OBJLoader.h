@@ -5,7 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <glut.h>
+#include <GL/glut.h>
 
 class Model_OBJ
 {

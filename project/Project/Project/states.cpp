@@ -4,11 +4,13 @@
 FSM::FSM()
 {
 	this->current_state = 1; 
-	this->availableTransitionNames = new std::string[2];
+	this->last_state = 1;
+	this->availableTransitionNames = new std::string[3];
 }
 
 
 void FSM::setCurrentState(int state){
+	this->last_state = this->current_state;
 	this->current_state = state;
 }
 
@@ -16,13 +18,7 @@ int FSM::getCurrentState(){
 	return this->current_state;
 }
 
-std::string FSM::getCurrentStateName(){
-	return statenames[this->current_state];
-}
 
-std::string FSM::getCurrentStateFilename(){
-	return stateObjFilenames[this->current_state];
-}
 
 const int* FSM::getAvailableTransitions(){
 	return transitions[this->current_state];
@@ -30,8 +26,9 @@ const int* FSM::getAvailableTransitions(){
 
 const std::string* FSM::getAvailableTransitionNames(){
 	const int* possibleTransitions = this->getAvailableTransitions();
-	this->availableTransitionNames[0] = statenames[possibleTransitions[0]];
-	this->availableTransitionNames[1] = statenames[possibleTransitions[1]];
+	this->availableTransitionNames[0] = transitionlabels[this->current_state][0];
+	this->availableTransitionNames[1] = transitionlabels[this->current_state][1];
+	this->availableTransitionNames[2] = transitionlabels[this->current_state][2];
 	return this->availableTransitionNames;
 }
 

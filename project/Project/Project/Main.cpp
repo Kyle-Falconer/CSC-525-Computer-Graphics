@@ -116,7 +116,7 @@ void viewDisplay()
 
 void drawText(int win, float x, float y, float r, float g, float b, float scale, std::string text){
 	glutSetWindow(win);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(r, g, b);
 	glRasterPos2i(x,y);
 	void * font = 	GLUT_BITMAP_9_BY_15;
 	for (string::iterator i = text.begin(); i != text.end(); ++i)
@@ -133,8 +133,9 @@ void bottomDisplay() {
 	drawWindowBox(bottom);
 
 	const std::string* transitionLabels = statemachine->getAvailableTransitionNames();
-	drawText(bottomWindow, -bottom.width / 2 + 50, bottom.height / 2 - 70, 1, 1, 1, 2,  "1 - " + transitionLabels[0]);
-	drawText(bottomWindow, -bottom.width / 2 + 50, -bottom.height / 2 + 70, 1, 1, 1, 2,  "2 - " + transitionLabels[1]);
+	drawText(bottomWindow, -bottom.width / 2 + 50, ( bottom.height / 2 )  -60, 1, 1, 1, 2,  transitionLabels[0]);
+	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2 ) -100, 1, 1, 1, 2,  transitionLabels[1]);
+	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2) - 140, 1, 1, 1, 2,  transitionLabels[2]);
 
 	glutSwapBuffers();
 }

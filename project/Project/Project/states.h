@@ -3,66 +3,42 @@
 
 #include <string>
 
-#define NUM_STATES 15
+#define NUM_STATES 10
 
-const std::string statenames[NUM_STATES] = {
-	"Go Home",			// 0 -> 0, 0
-	"Doors",			// 1 -> 2, 3
-	"Secretary",		// 2 -> 3, 4
-	"Human Resources",	// 3 -> 4, 0
-	"Window",			// 4 -> 5, 0
-	"Window Cleaner",	// 5 -> 8, 0
-	"Main Lobby",		// 6 -> 7, 2
-	"Elevator",			// 7 -> 6, 8
-	"Second Floor",		// 8 -> 9, 11
-	"Food Court",		// 9 -> 10, 11
-	"Eat Food",			// 10 -> 9, 0
-	"Stairs",			// 11 -> 12, 6
-	"Third Floor",		// 12 -> 11, 13
-	"Watercooler",		// 13 -> 12, 14
-	"Desk"				// 14 -> 14, 14
+
+const std::string transitionlabels[NUM_STATES][3] = {
+	{"You left the office without doing any work and have been fired.", "", ""},		// home
+	{"You see the front door.", "1 - Enter the front doors.", "2 - Get back in your car and leave."}, // doors
+	{"You see a receptionist, who suggests that you speak to H.R.", "1 - Talk to Human Resources.", "2 - Ignore the receptionist and climb out the window."},	// secretary
+	{"The Human Resources lady looks angry.", "1 - Talk to her.", "2 - Climb out the window."},	// HR
+	{"You poke your head out the window and see a ladder.", "1 - Climb up to the second floor.","2 - Climb down to the parking lot."},	// Window
+	{"You are on the second floor and see a corridor with labels at various entrance ways.","1 - Visit the food court.", "2 - Go to the stair well."}, // 2nd floor
+	{"You are now at the food court and see the stair well again in the distance.","1 - Eat some food.", "2 - Go to the stair well."}, // food court
+	{"You are standing in the stair well.","1 - Go up the stairs.", "2 - Go down the stairs."},
+	{"You are now on the third floor, back on familiar ground.","1 - Go to your desk.", "2 - Go back down the stairs."},
+	{"You made it to your desk!", "", ""}
 };
 
 const int transitions[NUM_STATES][2] = {
 	{0, 0},
-	{2, 3},
+	{2, 0},
 	{3, 4},
-	{4, 0},
-	{5, 0},
-	{8, 0},
-	{7, 2},
-	{6, 8},
-	{9, 11},
-	{10, 11},
-	{9, 0},
-	{12, 6},
-	{11, 13},
-	{12, 14},
-	{14, 14}
+	{0, 4},
+	{5, 1},
+	{6, 7},
+	{0, 7},
+	{8, 2},
+	{9, 7},
+	{9, 9}
 };
 
-const std::string stateObjFilenames[NUM_STATES] = {
-	"home",
-	"doors",
-	"secretary",
-	"hr",
-	"window",
-	"window_cleaner",
-	"lobby",
-	"elevator",
-	"floor_two",
-	"foodcourt",
-	"eating",
-	"stairs",
-	"floor_one",
-	"watercooler",
-	"desk"
-};
+
 
 class FSM
 {
 private:
 	int current_state;
+	int last_state;
 	std::string* availableTransitionNames;
 public: 
 	FSM();			
