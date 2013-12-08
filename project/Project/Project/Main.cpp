@@ -213,8 +213,10 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 	{
 	case KEY_ESCAPE:    
 		exit(0);   
-		break;      
-
+		break;
+	case GLUT_KEY_F1:
+		statemachine->setCurrentState(1);
+		break;
 	case '1':
 		statemachine->chooseFirstTransition();
 		break;
@@ -227,6 +229,20 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 		break;
 	}
 }
+
+void keyboard_special (int key, int x, int y)		
+{ 
+	switch ( key ) 
+	{
+	case GLUT_KEY_F1:
+		statemachine->setCurrentState(1);
+		break;
+
+	default:      
+		break;
+	}
+}
+
 void mapInit() {
 	bottomMap.width = 256;
 	bottomMap.height = bottom.height;
@@ -234,6 +250,7 @@ void mapInit() {
 	glutDisplayFunc(mapDisplay);
 	glClearColor(0, 0, 0, 1);
 	glutKeyboardFunc(keyboard);						// register Keyboard Handler
+	glutSpecialFunc(keyboard_special);
 	gluOrtho2D(-bottomMap.width / 2, bottomMap.width / 2, -bottomMap.height / 2, bottomMap.height / 2);  // specify a viewing area
 }
 
@@ -245,6 +262,7 @@ void bottomInit() {
 	bottomWindow = glutCreateSubWindow(mainWindow, 0, view.height, bottom.width, bottom.height);
 	glutDisplayFunc(bottomDisplay);
 	glutKeyboardFunc(keyboard);						// register Keyboard Handler
+	glutSpecialFunc(keyboard_special);
 	glClearColor(0, 0, 0, 1);			// specify a background
 	gluOrtho2D(-bottom.width / 2, bottom.width / 2, -bottom.height / 2, bottom.height / 2);  // specify a viewing area
 }
@@ -260,6 +278,7 @@ void viewInit() {
 	viewWindow = glutCreateSubWindow(mainWindow, 0, 0, view.width, view.height);		// create Window
 	glutDisplayFunc(viewDisplay);							// register Display Function
 	glutKeyboardFunc(keyboard);						// register Keyboard Handler
+	glutSpecialFunc(keyboard_special);
 	initialize();
 }
 
@@ -274,6 +293,7 @@ void mainInit() {
 	glutDisplayFunc(mainDisplay);
 	glutIdleFunc(displayCallback);					// register Idle Function
 	glutKeyboardFunc(keyboard);						// register Keyboard Handler
+	glutSpecialFunc(keyboard_special);
 	glClearColor(0, 0, 0, 0);
 }
 
@@ -283,7 +303,8 @@ void main(int argc, char **argv)
 {
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
-	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );  // Display Mode
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);  // Display Mode
+	
 	mainInit();
 	viewInit();
 	bottomInit();
