@@ -78,7 +78,41 @@ void viewDisplay()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		
 	glLoadIdentity();
 
-	displayer.render0();
+	switch (statemachine->getCurrentState())
+	{
+	case 0:
+		displayer.render0();
+		break;
+	case 1:
+		displayer.render1();
+		break;
+	case 2:
+		displayer.render2();
+		break;
+	case 3:
+		displayer.render3();
+		break;
+	case 4:
+		displayer.render4();
+		break;
+	case 5:
+		displayer.render5();
+		break;
+	case 6:
+		displayer.render6();
+		break;
+	case 7:
+		displayer.render7();
+		break;
+	case 8:
+		displayer.render8();
+		break;
+	case 9:
+		displayer.render9();
+		break;
+	default:
+		break;
+	}
 	
 	glPopMatrix();										  
 	glutSwapBuffers();
