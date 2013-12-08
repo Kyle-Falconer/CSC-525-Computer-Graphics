@@ -272,7 +272,7 @@ void viewInit() {
 	view.width = 1024;
 	view.height = 576;
 	view.field_of_view_angle = 45;
-	view.z_near = 1.0f;
+	view.z_near = 0.1f;
 	view.z_far = 500.0f;
 
 	viewWindow = glutCreateSubWindow(mainWindow, 0, 0, view.width, view.height);		// create Window

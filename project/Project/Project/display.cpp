@@ -15,7 +15,12 @@ void display::initRenders() {
 	sceneObjects[0][7].Load("scenes/0home/tv03");
 	sceneObjects[0][8].Load("scenes/0home/tvstand");
 
-
+	sceneObjects[1][0].Load("scenes/4window/leaves");
+	sceneObjects[1][1].Load("scenes/4window/exterior");
+	sceneObjects[1][2].Load("scenes/4window/trees");
+	sceneObjects[1][3].Load("scenes/4window/windows");
+	sceneObjects[1][4].Load("scenes/4window/lamppost");
+	sceneObjects[1][5].Load("scenes/4window/ground");
 
 	sceneObjects[7][0].Load("scenes/7stairs/stairs");
 	sceneObjects[7][1].Load("scenes/7stairs/floors");
@@ -63,7 +68,23 @@ void display::render5() {
 
 // Window
 void display::render4() {
+	glClearColor(0.2, 0.4, 0.8, 1);			// specify a background
+	// Define a viewing transformation
+	gluLookAt(2,1,0, 0,-2 ,0, 0,1,0);
 
+	// Push and pop the current matrix stack. 
+	// This causes that translations and rotations on this matrix wont influence others.
+
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
+
+	sceneObjects[1][0].Draw();
+	sceneObjects[1][1].Draw();
+	sceneObjects[1][2].Draw();
+	sceneObjects[1][3].Draw();
+	sceneObjects[1][4].Draw();
+	sceneObjects[1][5].Draw();
 }
 
 // Human resources
@@ -78,7 +99,23 @@ void display::render2() {
 
 // Doors
 void display::render1() {
+	glClearColor(0.2, 0.4, 0.8, 1);			// specify a background
+	// Define a viewing transformation
+	gluLookAt(.5,0.25,1.5, 2,0,1, 0,1,0);	
 
+	// Push and pop the current matrix stack. 
+	// This causes that translations and rotations on this matrix wont influence others.
+
+	glPushMatrix();										
+	glTranslatef(0,0,0);
+	glScalef(0.25, 0.25, 0.25);
+
+	sceneObjects[1][0].Draw();
+	sceneObjects[1][1].Draw();
+	sceneObjects[1][2].Draw();
+	sceneObjects[1][3].Draw();
+	sceneObjects[1][4].Draw();
+	sceneObjects[1][5].Draw();
 }
 
 // Home
@@ -92,4 +129,14 @@ void display::render0() {
 	glPushMatrix();										
 	glTranslatef(0,0,0);							
 	glScalef(0.25, 0.25, 0.25);
+
+	sceneObjects[0][0].Draw();
+	sceneObjects[0][1].Draw();
+	sceneObjects[0][2].Draw();
+	sceneObjects[0][3].Draw();
+	sceneObjects[0][4].Draw();
+	sceneObjects[0][5].Draw();
+	sceneObjects[0][6].Draw();
+	sceneObjects[0][7].Draw();
+	sceneObjects[0][8].Draw();
 }
