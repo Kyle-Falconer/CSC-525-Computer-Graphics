@@ -78,7 +78,7 @@ void display::render9() {
 
 //Third floor
 void display::render8() {
-	gluLookAt(2,2,-1, 0,0,0, 0,1,0);	
+	gluLookAt(2.3,1.0,-0.2, 0,0,0, 0,1,0);	
 
 	glPushMatrix();										
 	glTranslatef(0,0,0);							

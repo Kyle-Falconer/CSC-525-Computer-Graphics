@@ -27,9 +27,12 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 #define KEY_ESCAPE 27
 
 int mainWindow;
+int infoWindow;
 int viewWindow;
 int bottomWindow;
 int mapWindow;
+
+bool info_visible = 0;
 
 Model_OBJ obj[9];
 FSM* statemachine;
@@ -56,12 +59,12 @@ float g_rotation_speed = 0.2f;
 void drawWindowBox(glutWindow cur) {
 	glLineWidth(4);
 	glBegin(GL_LINE_STRIP);
-		glColor3f(1, 1, 1);
-		glVertex2f((cur.width / 2) - 8, (cur.height / 2) - 8);
-		glVertex2f((cur.width / 2) - 8, -(cur.height / 2) + 8);
-		glVertex2f(-(cur.width / 2) + 8, -(cur.height / 2) + 8);
-		glVertex2f(-(cur.width / 2) + 8, (cur.height / 2) - 8);
-		glVertex2f((cur.width / 2) - 8, (cur.height / 2) - 8);
+	glColor3f(1, 1, 1);
+	glVertex2f((cur.width / 2) - 8, (cur.height / 2) - 8);
+	glVertex2f((cur.width / 2) - 8, -(cur.height / 2) + 8);
+	glVertex2f(-(cur.width / 2) + 8, -(cur.height / 2) + 8);
+	glVertex2f(-(cur.width / 2) + 8, (cur.height / 2) - 8);
+	glVertex2f((cur.width / 2) - 8, (cur.height / 2) - 8);
 	glEnd();
 }
 
@@ -113,12 +116,12 @@ void viewDisplay()
 	default:
 		break;
 	}
-	
+
 	glPopMatrix();										  
 	glutSwapBuffers();
 }
 
-void drawText(int win, float x, float y, float r, float g, float b, float scale, std::string text){
+void drawText(int win, float x, float y, float r, float g, float b, std::string text){
 	glutSetWindow(win);
 	glColor3f(r, g, b);
 	glRasterPos2i(x,y);
@@ -137,9 +140,9 @@ void bottomDisplay() {
 	drawWindowBox(bottom);
 
 	const std::string* transitionLabels = statemachine->getAvailableTransitionNames();
-	drawText(bottomWindow, -bottom.width / 2 + 50, ( bottom.height / 2 )  -60, 1, 1, 1, 2,  transitionLabels[0]);
-	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2 ) -100, 1, 1, 1, 2,  transitionLabels[1]);
-	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2) - 140, 1, 1, 1, 2,  transitionLabels[2]);
+	drawText(bottomWindow, -bottom.width / 2 + 50, ( bottom.height / 2 )  -60, 1, 1, 1,  transitionLabels[0]);
+	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2 ) -100, 1, 1, 1,  transitionLabels[1]);
+	drawText(bottomWindow, -bottom.width / 2 + 70, ( bottom.height / 2) - 140, 1, 1, 1,  transitionLabels[2]);
 
 	glutSwapBuffers();
 }
@@ -148,7 +151,7 @@ void mapDisplay() {
 	glutSetWindow(mapWindow);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLineWidth(4);
-	
+
 	drawWindowBox(bottomMap);
 
 	glutSwapBuffers();
@@ -191,6 +194,35 @@ void initialize ()
 	glClearColor(1, 1, 1, 0);
 }
 
+
+
+void hideInfoWindow(){
+	// hide info
+	cout << "hiding info window"<<endl;
+	glutSetWindow(infoWindow);
+	glutHideWindow();
+	glutSetWindow(mainWindow);
+	info_visible = 0;
+}
+
+void showInfoWindow(){
+	// show info
+	cout << "showing info window"<<endl;
+	glutSetWindow(infoWindow);
+	glutShowWindow();
+	glutSetWindow(mainWindow);
+	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "This text editor allows you to type text on ");
+	info_visible = 1;	
+}
+
+void toggleInfo(){
+	if (info_visible){
+		hideInfoWindow();
+	} else {
+		showInfoWindow();
+	}
+}
+
 void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
 { 
 	switch ( key ) 
@@ -214,11 +246,16 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 	}
 }
 
+
 void keyboard_special (int key, int x, int y)		
 { 
 	switch ( key ) 
 	{
 	case GLUT_KEY_F1:
+		toggleInfo();
+		break;
+
+	case GLUT_KEY_F5:
 		statemachine->setCurrentState(1);
 		break;
 
@@ -226,6 +263,8 @@ void keyboard_special (int key, int x, int y)
 		break;
 	}
 }
+
+
 
 void mapInit() {
 	bottomMap.width = 256;
@@ -267,6 +306,7 @@ void viewInit() {
 }
 
 void mainInit() {
+
 	// set window values
 	win.width = 1024;
 	win.height = 768;
@@ -281,15 +321,30 @@ void mainInit() {
 	glClearColor(0, 0, 0, 0);
 }
 
+void infoInit(){
+	glutInitWindowSize(350, win.height);
+	glutInitWindowPosition(win.width+20, 0);				
+	infoWindow = glutCreateWindow("Info/Help");
+	glutDisplayFunc(displayCallback);
+	glutIdleFunc(displayCallback);					// register Idle Function
+	glutKeyboardFunc(keyboard);						// register Keyboard Handler
+	glutSpecialFunc(keyboard_special);
+	glClearColor(0, 0, 0, 0);
+}
+
 
 
 void main(int argc, char **argv) 
 {
+	cout << "loading..."<<endl;
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);  // Display Mode
+
 	
 	mainInit();
+	infoInit();
+	hideInfoWindow();
 	viewInit();
 	bottomInit();
 	mapInit();

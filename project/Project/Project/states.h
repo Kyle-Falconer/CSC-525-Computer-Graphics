@@ -7,7 +7,7 @@
 
 
 const std::string transitionlabels[NUM_STATES][3] = {
-	{"You left the office without doing any work and have been fired.", "", ""},		// home
+	{"", "Press F1 to restart.", "Press Esc to quit."},		// home
 	{"You see the front door.", "1 - Enter the front doors.", "2 - Get back in your car and leave."}, // doors
 	{"You see a receptionist, who suggests that you speak to H.R.", "1 - Talk to Human Resources.", "2 - Ignore the receptionist and climb out the window."},	// secretary
 	{"The Human Resources lady looks angry.", "1 - Talk to her.", "2 - Climb out the window."},	// HR
@@ -33,7 +33,7 @@ const int transitions[NUM_STATES][2] = {
 };
 
 const std::string failureReasonMessages[NUM_STATES] = {
-	"",
+	"You left the office without doing any work and have been fired.",
 	"Your boss saw you leave without working and have now been fired.",
 	"",
 	"You have been eaten by a grue.",
