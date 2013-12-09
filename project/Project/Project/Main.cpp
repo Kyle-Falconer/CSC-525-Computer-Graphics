@@ -1,12 +1,29 @@
 /*===================================================================================
 PROGRAMMER:			Brett Story,	Kyle Falconer
 FOLDERS:				Brett322,		Falconer1
-BRETT'S TASKS:			FIXME
-KYLE'S TASKS:			FIXME
+
+BRETT'S TASKS:			* Researching and getting a .obj file loader to work
+						* Cleaning up 3D models in Blender.
+						* Exporting models from Blender into seperate object and
+						  color files to allow the models to work with the .obj
+						  loader.
+						* Camera and lighting positions for each scene.
+						* Wrote half of the info messages.
+
+KYLE'S TASKS:			* Implementation of the Info window.
+						* Implementation of the Finite State Machine.
+						* Implementation of game logic.
+						* Writing the transition messages and half of the info
+						  messages.
+
 COURSE:				CSC 525/625
 LAST MODIFIED DATE:	Oct. 5, 2013
-DESCRIPTION:			FIXME
-NOTE:					FIXME
+DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
+						and also talk about the benefits of being a Computer
+						Scientist.
+
+NOTE:					Usage should be self-explanitory. Instructions are given
+						in the info window the program runs.
 
 FILES:					Main.cpp, (Project.sln, ...)
 IDE/COMPILER:			MicroSoft Visual Studio 2012
@@ -16,6 +33,7 @@ INSTRUCTION FOR COMPILATION AND EXECUTION:
 3.		Press Ctrl+Shift+B				to BUILD (COMPILE+LINK)
 4.		Press Ctrl+F5					to EXECUTE
 ===================================================================================*/
+
 #define _USE_MATH_DEFINES
 #include <iostream>
 #include <GL/glut.h>				// include GLUT library

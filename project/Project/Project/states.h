@@ -77,7 +77,7 @@ const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
 	// Reception
 	{"The average salary of a Software",
 	  "Engineer with a Computer Science",
-	  "degree was $90,000.",
+	  "degree is $90,000.",
 	  "(2013, indeed.com)",
 	  "",
 	  "",
