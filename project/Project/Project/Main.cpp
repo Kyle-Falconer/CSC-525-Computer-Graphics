@@ -10,7 +10,8 @@ BRETT'S TASKS:			* Researching and getting a .obj file loader to work
 						* Camera and lighting positions for each scene.
 						* Wrote half of the info messages.
 
-KYLE'S TASKS:			* Implementation of the Info window.
+KYLE'S TASKS:			* Sourcing 3D models from 3D Warehouse
+						* Implementation of the Info window.
 						* Implementation of the Finite State Machine.
 						* Implementation of game logic.
 						* Writing the transition messages and half of the info

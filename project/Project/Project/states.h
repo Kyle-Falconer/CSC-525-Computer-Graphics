@@ -47,8 +47,6 @@ const std::string failureReasonMessages[NUM_STATES] = {
 };
 
 const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
-	// 37 characters long:
-	// "0123456789012345789012345678901234890"
 
 	// Home
 	{ "This game was created by",
@@ -146,14 +144,14 @@ const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
 	  ""},
 
 	// Third Floor
-	{ "",
-	  "",
-	  "",
-	  "",
-	  "",
-	  "",
-	  "",
-	  "",
+	{ "This game is a simple representation",
+	  "of something called a Finite State ",
+	  "Machine (FSM). Each \"state\", like",
+	  "this one, has two choices, also called",
+	  "\"transitions\" or \"paths\". A FSM",
+	  "is just one of the many kinds of ",
+	  "tools used by Computer Scientists when",
+	  "trying to solve complex problems.",
 	  "",
 	  ""},
 

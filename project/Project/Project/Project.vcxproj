@@ -81,15 +81,11 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="OBJLoader.cpp" />
     <ClCompile Include="states.cpp" />
-    <ClCompile Include="TGALoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="display.h" />
     <ClInclude Include="OBJLoader.h" />
     <ClInclude Include="states.h" />
-    <ClInclude Include="TGALoader.h" />
-    <ClInclude Include="Vec3.h" />
-    <ClInclude Include="Vec3_Inline.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

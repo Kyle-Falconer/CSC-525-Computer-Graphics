@@ -30,9 +30,6 @@
     <ClCompile Include="OBJLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TGALoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="states.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,15 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OBJLoader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TGALoader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vec3_Inline.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="states.h">
