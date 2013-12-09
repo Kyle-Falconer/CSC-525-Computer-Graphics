@@ -1,4 +1,20 @@
-/*===================================================================================
+/*
+  Copyright 2013 Brett Story and Kyle Falconer
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+	   http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+===================================================================================
+
 PROGRAMMER:			Brett Story,	Kyle Falconer
 FOLDERS:				Brett322,		Falconer1
 
@@ -18,7 +34,9 @@ KYLE'S TASKS:			* Sourcing 3D models from 3D Warehouse
 						  messages.
 
 COURSE:				CSC 525/625
+
 LAST MODIFIED DATE:	Dec. 8, 2013
+
 DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 						and also talk about the benefits of being a Computer
 						Scientist.
@@ -26,11 +44,12 @@ DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 NOTE:					Usage should be self-explanitory. Instructions are given
 						in the info window the program runs.
 						
-					If using a .exe to run the program, make sure the scenes
-					folder is in the same directory as the .exe
+						If using a .exe to run the program, make sure the scenes
+						folder is in the same directory as the .exe
 
-FILES:					Main.cpp, FSM.cpp, OBJLoader.cpp,
-					display.cpp, project.sln, and headers.
+FILES:					Main.cpp, OBJLoader.cpp, display.cpp,
+						project.sln, and headers.
+
 IDE/COMPILER:			MicroSoft Visual Studio 2012
 INSTRUCTION FOR COMPILATION AND EXECUTION:
 1.		Double click on project.sln	to OPEN the project
