@@ -32,7 +32,6 @@ int viewWindow;
 int bottomWindow;
 int mapWindow;
 
-bool info_visible = 0;
 
 Model_OBJ obj[9];
 FSM* statemachine;
@@ -81,8 +80,8 @@ void infoDisplay(){
 	glutSetWindow(infoWindow);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	int start_x = -160;
-	int start_y = 480;
+	int start_x = -((info.width-20)/2);
+	int start_y = ((info.height-40)/2);
 
 
 	const std::string* lines = statemachine->getCurrentInfo();
@@ -97,10 +96,14 @@ void infoDisplay(){
 	// TODO:
 	// Add general usability info here to be displayed at each scene in the game
 	// like, the controls and the meta keys.
-	start_y = start_y - 40;
-	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "usability 1");
+	start_y = start_y - 60;
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "Options");
+	start_y = start_y - 10;
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "=====================================");
 	start_y = start_y - 20;
-	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "usability 2");
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "F5  - Restart game");
+	start_y = start_y - 20;
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "Esc - Quit program");
 
 
 	glPopMatrix();										  
@@ -229,16 +232,6 @@ void initialize ()
 }
 
 
-
-void hideInfoWindow(){
-	// hide info
-	cout << "hiding info window"<<endl;
-	glutSetWindow(infoWindow);
-	glutHideWindow();
-	glutSetWindow(mainWindow);
-	info_visible = 0;
-}
-
 void showInfoWindow(){
 	// show info
 	cout << "showing info window"<<endl;
@@ -246,17 +239,9 @@ void showInfoWindow(){
 	glutShowWindow();
 	glClearColor(.5, .5, .5, 0);
 	gluOrtho2D(-(info.width/2), (info.width/2), -(info.height/2), (info.height/2));
-	glutSetWindow(mainWindow);
-	info_visible = 1;	
+	glutSetWindow(mainWindow);	
 }
 
-void toggleInfo(){
-	if (info_visible){
-		hideInfoWindow();
-	} else {
-		showInfoWindow();
-	}
-}
 
 void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
 { 
@@ -264,9 +249,6 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 	{
 	case KEY_ESCAPE:    
 		exit(0);   
-		break;
-	case GLUT_KEY_F1:
-		statemachine->setCurrentState(1);
 		break;
 	case '1':
 		statemachine->chooseFirstTransition();
@@ -286,10 +268,6 @@ void keyboard_special (int key, int x, int y)
 { 
 	switch ( key ) 
 	{
-	case GLUT_KEY_F1:
-		toggleInfo();
-		break;
-
 	case GLUT_KEY_F5:
 		statemachine->setCurrentState(1);
 		break;
@@ -359,8 +337,8 @@ void mainInit() {
 void infoInit(){
 	
 	// set window values
-	info.width = 350;
-	info.height = win.width;
+	info.width = 360;
+	info.height = win.height/2;
 	info.title = "Info/Help";
 
 	glutInitWindowSize(info.width, info.height);

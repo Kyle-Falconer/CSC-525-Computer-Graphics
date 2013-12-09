@@ -47,36 +47,38 @@ const std::string failureReasonMessages[NUM_STATES] = {
 };
 
 const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
+	// 37 characters long:
+	// "0123456789012345789012345678901234890"
 
 	// Home
-	{ "This game was created for the",
+	{ "This game was created by",
+	  "      Brett Story and Kyle Falconer   ",
+	  "For the:",
+	  "       Computer Science Department    ",
+	  "                   at               ",
+	  "        Missouri State University   ",
 	  "",
-	  "     Missouri State University Computer Science Department",
-	  "",
-	  "By: Brett Story and Kyle Falconer",
-	  "",
-	  "Basic 3D models were obtained through the",
-	  "Trimble 3D Warehouse",
-	  "http://sketchup.google.com/3dwarehouse/",
-	  ""},
+	  "Basic 3D models were obtained through",
+	  "the Trimble 3D Warehouse",
+	  "http://sketchup.google.com/3dwarehouse/"},
 
 	// Front Doors
-	{ "Welcome to your first day at work as a Software Engineer!",
-	  "",
-	  "It looks like there is some construction going on and the elevator is out.",
-	  "You will have to find your way to your desk using another path.",
-	  "",
-	  "",
+	{ "Welcome to your first day at work as a",
+	  "Software Engineer!",
+	  "It looks like there is some ",
+	  "construction going on and the elevator ",
+	  "is out. You will have to find your way ",
+	  "to your desk using another path.",
 	  "",
 	  "",
 	  "",
 	  ""},
 
 	// Reception
-	{ "",
-	  "",
-	  "",
-	  "",
+	{"The average salary of a Software",
+	  "Engineer with a Computer Science",
+	  "degree was $90,000.",
+	  "(2013, indeed.com)",
 	  "",
 	  "",
 	  "",
@@ -97,10 +99,10 @@ const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
 	  ""},
 
 	// Window
-	{ "",
-	  "",
-	  "",
-	  "",
+	{ "Speaking of windows, Microsoft Windows",
+	  "is just one example of the many",
+	  "programs made by Software Engineers",
+	  "and Computer Scientists.",
 	  "",
 	  "",
 	  "",
@@ -121,13 +123,13 @@ const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
 	  ""},
 
 	// Food Court
-	{ "",
-	  "",
-	  "",
-	  "",
-	  "",
-	  "",
-	  "",
+	{ "Many software companies go to great",
+	  "lengths to make sure their employees",
+	  "are happy, healthy, and comfortable.",
+	  "Many companies, like Google and Apple",
+	  "have on-site cafeterias, fitness",
+	  "centers, laundry, daycare, and other",
+	  "amenities.",
 	  "",
 	  "",
 	  ""},
