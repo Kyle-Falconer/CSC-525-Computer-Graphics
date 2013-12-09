@@ -38,6 +38,8 @@ Model_OBJ obj[9];
 FSM* statemachine;
 display displayer;
 
+void drawText(int win, float x, float y, float r, float g, float b, std::string text);
+
 typedef struct {
 	int width;
 	int height;
@@ -49,6 +51,7 @@ typedef struct {
 } glutWindow;
 
 glutWindow win;
+glutWindow info;
 glutWindow view;
 glutWindow bottom;
 glutWindow bottomMap;
@@ -71,6 +74,27 @@ void drawWindowBox(glutWindow cur) {
 void mainDisplay() {
 	glutSetWindow(mainWindow);
 	glClear(GL_COLOR_BUFFER_BIT);
+	glutSwapBuffers();
+}
+
+void infoDisplay(){
+	glutSetWindow(infoWindow);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	int start_x = -160;
+	int start_y = 480;
+
+
+	const std::string* lines = statemachine->getCurrentInfo();
+
+
+	for (int i = 0; i < NUM_INFO_LINES; i++){
+		drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  lines[i]);
+		start_x = start_x;
+		start_y = start_y-20;
+	}
+
+
 	glutSwapBuffers();
 }
 
@@ -210,8 +234,9 @@ void showInfoWindow(){
 	cout << "showing info window"<<endl;
 	glutSetWindow(infoWindow);
 	glutShowWindow();
+	glClearColor(.5, .5, .5, 0);
+	gluOrtho2D(-(info.width/2), (info.width/2), -(info.height/2), (info.height/2));
 	glutSetWindow(mainWindow);
-	drawText(infoWindow, -190, 260, 1.0, 0.0, 0.0,  "This text editor allows you to type text on ");
 	info_visible = 1;	
 }
 
@@ -322,10 +347,16 @@ void mainInit() {
 }
 
 void infoInit(){
-	glutInitWindowSize(350, win.height);
+	
+	// set window values
+	info.width = 350;
+	info.height = win.width;
+	info.title = "Info/Help";
+
+	glutInitWindowSize(info.width, info.height);
 	glutInitWindowPosition(win.width+20, 0);				
-	infoWindow = glutCreateWindow("Info/Help");
-	glutDisplayFunc(displayCallback);
+	infoWindow = glutCreateWindow(info.title);
+	glutDisplayFunc(infoDisplay);
 	glutIdleFunc(displayCallback);					// register Idle Function
 	glutKeyboardFunc(keyboard);						// register Keyboard Handler
 	glutSpecialFunc(keyboard_special);
@@ -336,7 +367,7 @@ void infoInit(){
 
 void main(int argc, char **argv) 
 {
-	cout << "loading..."<<endl;
+	
 	// initialize and run program
 	glutInit(&argc, argv);                                      // GLUT initialization
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_MULTISAMPLE);  // Display Mode

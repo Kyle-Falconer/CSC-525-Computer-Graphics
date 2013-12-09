@@ -5,6 +5,7 @@ display::display() {
 }
 
 void display::initRenders() {
+	cout << "loading scenes..."<<endl;
 	sceneObjects[0][0].Load("scenes/0home/couch");
 	sceneObjects[0][1].Load("scenes/0home/floor");
 	sceneObjects[0][2].Load("scenes/0home/walls");

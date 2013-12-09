@@ -46,3 +46,7 @@ void FSM::chooseFirstTransition(){
 void FSM::chooseSecondTransition(){
 	this->setCurrentState(this->getAvailableTransitions()[1]);
 }
+
+const std::string* FSM::getCurrentInfo(){
+	return statesInfo[this->current_state];
+}

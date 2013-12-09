@@ -4,10 +4,11 @@
 #include <string>
 
 #define NUM_STATES 10
+#define NUM_INFO_LINES 10
 
 
 const std::string transitionlabels[NUM_STATES][3] = {
-	{"", "Press F1 to restart.", "Press Esc to quit."},		// home
+	{"", "Press F5 to restart.", "Press Esc to quit."},		// home
 	{"You see the front door.", "1 - Enter the front doors.", "2 - Get back in your car and leave."}, // doors
 	{"You see a receptionist, who suggests that you speak to H.R.", "1 - Talk to Human Resources.", "2 - Ignore the receptionist and climb out the window."},	// secretary
 	{"The Human Resources lady looks angry.", "1 - Talk to her.", "2 - Climb out the window."},	// HR
@@ -45,6 +46,129 @@ const std::string failureReasonMessages[NUM_STATES] = {
 	""
 };
 
+const std::string statesInfo[NUM_STATES][NUM_INFO_LINES] = {
+
+	// Home
+	{ "This game was created for the",
+	  "",
+	  "     Missouri State University Computer Science Department",
+	  "",
+	  "By: Brett Story and Kyle Falconer",
+	  "",
+	  "Basic 3D models were obtained through the",
+	  "Trimble 3D Warehouse",
+	  "http://sketchup.google.com/3dwarehouse/",
+	  ""},
+
+	// Front Doors
+	{ "Welcome to your first day at work as a Software Engineer!",
+	  "",
+	  "It looks like there is some construction going on and the elevator is out.",
+	  "You will have to find your way to your desk using another path.",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Reception
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Human Resouces
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Window
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Second Floor
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Food Court
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Stairs
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Third Floor
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""},
+
+	// Desk
+	{ "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  "",
+	  ""}
+};
+
 
 
 class FSM
@@ -63,7 +187,7 @@ public:
 	const std::string* FSM::getAvailableTransitionNames();
 	void FSM::chooseFirstTransition();
 	void FSM::chooseSecondTransition();
-
+	const std::string* FSM::getCurrentInfo();
 };
 
 #endif
