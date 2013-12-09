@@ -25,6 +25,9 @@ DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 
 NOTE:					Usage should be self-explanitory. Instructions are given
 						in the info window the program runs.
+						
+					If using a .exe to run the program, make sure the scenes
+					folder is in the same directory as the .exe
 
 FILES:					Main.cpp, FSM.cpp, OBJLoader.cpp,
 					display.cpp, project.sln, and headers.
