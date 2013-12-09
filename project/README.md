@@ -1,6 +1,8 @@
 # CSC 525 - Computer Graphics
 ## Group Project
 
+[Video walkthrough and demonstration](https://www.youtube.com/watch?v=P2dpwtoq3iY)
+
 Goals:
 * Demonstrate a finite state automata (FSM)
 * Choose between two transitions from each state
