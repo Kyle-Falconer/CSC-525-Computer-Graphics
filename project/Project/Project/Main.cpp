@@ -343,7 +343,7 @@ void mainInit() {
 	// set window values
 	win.width = 1024;
 	win.height = 768;
-	win.title = "Finite State Machine Game (working title)";
+	win.title = "Finite State Machine Game";
 
 	glutInitWindowSize(win.width, win.height);
 	mainWindow = glutCreateWindow(win.title);
