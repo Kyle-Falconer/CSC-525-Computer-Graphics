@@ -94,7 +94,16 @@ void infoDisplay(){
 		start_y = start_y-20;
 	}
 
+	// TODO:
+	// Add general usability info here to be displayed at each scene in the game
+	// like, the controls and the meta keys.
+	start_y = start_y - 40;
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "usability 1");
+	start_y = start_y - 20;
+	drawText(infoWindow, start_x, start_y, 1.0, 1.0, 1.0,  "usability 2");
 
+
+	glPopMatrix();										  
 	glutSwapBuffers();
 }
 
@@ -183,6 +192,7 @@ void mapDisplay() {
 
 void displayCallback() {
 	viewDisplay();
+	infoDisplay();
 	bottomDisplay();
 	mapDisplay();
 }
@@ -375,7 +385,7 @@ void main(int argc, char **argv)
 	
 	mainInit();
 	infoInit();
-	hideInfoWindow();
+	showInfoWindow();
 	viewInit();
 	bottomInit();
 	mapInit();
