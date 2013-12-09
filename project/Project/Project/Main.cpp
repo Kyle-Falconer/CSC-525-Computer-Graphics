@@ -18,7 +18,7 @@ KYLE'S TASKS:			* Sourcing 3D models from 3D Warehouse
 						  messages.
 
 COURSE:				CSC 525/625
-LAST MODIFIED DATE:	Oct. 5, 2013
+LAST MODIFIED DATE:	Dec. 8, 2013
 DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 						and also talk about the benefits of being a Computer
 						Scientist.
@@ -26,10 +26,11 @@ DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 NOTE:					Usage should be self-explanitory. Instructions are given
 						in the info window the program runs.
 
-FILES:					Main.cpp, (Project.sln, ...)
+FILES:					Main.cpp, FSM.cpp, OBJLoader.cpp,
+					display.cpp, project.sln, and headers.
 IDE/COMPILER:			MicroSoft Visual Studio 2012
 INSTRUCTION FOR COMPILATION AND EXECUTION:
-1.		Double click on labProject.sln	to OPEN the project
+1.		Double click on project.sln	to OPEN the project
 2.		Press Ctrl+F7					to COMPILE
 3.		Press Ctrl+Shift+B				to BUILD (COMPILE+LINK)
 4.		Press Ctrl+F5					to EXECUTE
