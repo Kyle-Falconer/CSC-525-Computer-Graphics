@@ -18,7 +18,8 @@
 PROGRAMMER:			Brett Story,	Kyle Falconer
 FOLDERS:				Brett322,		Falconer1
 
-BRETT'S TASKS:			* Researching and getting a .obj file loader to work
+BRETT'S TASKS:			50%
+						* Researching and getting a .obj file loader to work
 						* Cleaning up 3D models in Blender.
 						* Exporting models from Blender into seperate object and
 						  color files to allow the models to work with the .obj
@@ -26,16 +27,17 @@ BRETT'S TASKS:			* Researching and getting a .obj file loader to work
 						* Camera and lighting positions for each scene.
 						* Wrote half of the info messages.
 
-KYLE'S TASKS:			* Sourcing 3D models from 3D Warehouse
+KYLE'S TASKS:			50%
+						* Sourcing 3D models from 3D Warehouse
 						* Implementation of the Info window.
 						* Implementation of the Finite State Machine.
 						* Implementation of game logic.
 						* Writing the transition messages and half of the info
 						  messages.
 
-COURSE:				CSC 525/625
+COURSE:					CSC 525/625
 
-LAST MODIFIED DATE:	Dec. 8, 2013
+LAST MODIFIED DATE:		Dec. 8, 2013
 
 DESCRIPTION:			A Finite State Machine Game, used to demonstrate a FSM
 						and also talk about the benefits of being a Computer
@@ -47,7 +49,7 @@ NOTE:					Usage should be self-explanitory. Instructions are given
 						If using a .exe to run the program, make sure the scenes
 						folder is in the same directory as the .exe
 
-FILES:					Main.cpp, OBJLoader.cpp, display.cpp,
+FILES:					Main.cpp, OBJLoader.cpp, display.cpp, states.cpp,
 						project.sln, and headers.
 
 IDE/COMPILER:			MicroSoft Visual Studio 2012
@@ -72,7 +74,6 @@ int mainWindow;
 int infoWindow;
 int viewWindow;
 int bottomWindow;
-int mapWindow;
 
 
 Model_OBJ obj[9];
@@ -225,21 +226,10 @@ void bottomDisplay() {
 	glutSwapBuffers();
 }
 
-void mapDisplay() {
-	glutSetWindow(mapWindow);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLineWidth(4);
-
-	drawWindowBox(bottomMap);
-
-	glutSwapBuffers();
-}
-
 void displayCallback() {
 	viewDisplay();
 	infoDisplay();
 	bottomDisplay();
-	mapDisplay();
 }
 
 void initialize () 
@@ -319,22 +309,9 @@ void keyboard_special (int key, int x, int y)
 	}
 }
 
-
-
-void mapInit() {
-	bottomMap.width = 256;
-	bottomMap.height = bottom.height;
-	mapWindow = glutCreateSubWindow(mainWindow, bottom.width, view.height, bottomMap.width, bottomMap.height);
-	glutDisplayFunc(mapDisplay);
-	glClearColor(0, 0, 0, 1);
-	glutKeyboardFunc(keyboard);						// register Keyboard Handler
-	glutSpecialFunc(keyboard_special);
-	gluOrtho2D(-bottomMap.width / 2, bottomMap.width / 2, -bottomMap.height / 2, bottomMap.height / 2);  // specify a viewing area
-}
-
 void bottomInit() {
 	// set window values
-	bottom.width = 768;
+	bottom.width = 1024;
 	bottom.height = 192;
 
 	bottomWindow = glutCreateSubWindow(mainWindow, 0, view.height, bottom.width, bottom.height);
@@ -408,7 +385,6 @@ void main(int argc, char **argv)
 	showInfoWindow();
 	viewInit();
 	bottomInit();
-	mapInit();
 	statemachine = new FSM();
 
 	glutMainLoop();												// run GLUT mainloop
